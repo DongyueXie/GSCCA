@@ -1,0 +1,97 @@
+---
+title: "Model 3 Simulation"
+author: "Dongyue Xie"
+output: html_document
+---
+
+<!-- The file analysis/chunks.R contains chunks that define default settings
+shared across the workflowr files. -->
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+<!-- Update knitr chunk options -->
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+<!-- Insert the date the file was last updated -->
+```{r last-updated, echo=FALSE, results='asis'}
+```
+
+<!-- Insert the code version (Git commit SHA1) if Git repository exists and R
+ package git2r is installed -->
+```{r code-version, echo=FALSE, results='asis'}
+```
+
+<!-- Add your analysis here -->
+
+Model 3 examines the effect of auto-regressive correlation.
+```{r,warning=FALSE,message=FALSE}
+library(scca)
+u=c(rep(1,10),rep(-1,10),rep(0,80))
+v=c(rep(c(1,0.2),5),rep(c(-1,-0.2),5),rep(0,80))
+edges=c(as.numeric(combn(1:10,2)),as.numeric(combn(11:20,2)),21:100)
+
+rholist=seq(0.1,0.9,length.out = 9)
+model3S0=c()
+model3S1=c()
+model3elnet=c()
+model3gscca=c()
+for(rho in 1:length(rholist)){
+  sigma_x=arcov(rholist[rho],100)
+  sigma_y=sigma_x
+  model3S0=rbind(model3S0,finals(s0cca_simu(1,u,v,50,'normal',1,sigma_x,sigma_y)))
+  model3S1=rbind(model3S1,finals(s1cca_simu(1,u,v,50,'normal',1,sigma_x,sigma_y)))
+  model3elnet=rbind(model3elnet,finals(elnet.cca.simu(1,u,v,50,'normal',1,sigma_x,sigma_y)))
+  model3gscca=rbind(model3gscca,finals(gscca.simu.normal(1,edges,u,v,50,'normal',1,sigma_x,sigma_y)))
+}
+
+#TPR_u
+plot(rholist,model3S0[,1],xlab=expression(rho),ylab = '',main = 'TPR and FPR for selecting X',type = 'b',
+     xlim = c(0.1,1.4),ylim = c(0,1), xaxt="n")
+v1=rholist
+v2=paste(rholist)
+axis(1,v1)
+lines(rholist,model3S1[,1],type = 'b',lty=2)
+lines(rholist,model3elnet[,1],type = 'b',lty=3)
+lines(rholist,model3gscca[,1],type = 'b',lty=4)
+#FPR_u
+lines(rholist,model3S0[,3],type = 'b',col=4,pch=8)
+lines(rholist,model3S1[,3],type = 'b',lty=2,col=4,pch=8)
+lines(rholist,model3elnet[,3],type = 'b',lty=3,col=4,pch=8)
+lines(rholist,model3gscca[,3],type = 'b',lty=4,col=4,pch=8)
+legend('topright',legend = c('S0CCA','SCCA','ENSCCA','GSCCA','TPR','FPR'),lty=c(1,2,3,4,NA,NA),pch=c(NA,NA,NA,NA,1,8),col = c(1,1,1,1,1,4))
+```
+
+```{r}
+plot(rholist,model3S0[,5],xlab=expression(rho),ylab = '',main = 'TPR and FPR for selecting Y',type = 'b',
+     xlim = c(0.1,1.4),ylim = c(0,1), xaxt="n")
+v1=rholist
+v2=paste(rholist)
+axis(1,v1)
+lines(rholist,model3S1[,5],type = 'b',lty=2)
+lines(rholist,model3elnet[,5],type = 'b',lty=3)
+lines(rholist,model3gscca[,5],type = 'b',lty=4)
+#FPR_v
+lines(rholist,model3S0[,7],type = 'b',col=4,pch=8)
+lines(rholist,model3S1[,7],type = 'b',lty=2,col=4,pch=8)
+lines(rholist,model3elnet[,7],type = 'b',lty=3,col=4,pch=8)
+lines(rholist,model3gscca[,7],type = 'b',lty=4,col=4,pch=8)
+legend('topright',legend = c('S0CCA','SCCA','ENSCCA','GSCCA','TPR','FPR'),lty=c(1,2,3,4,NA,NA),pch=c(NA,NA,NA,NA,1,8),col = c(1,1,1,1,1,4))
+```
+
+```{r}
+plot(rholist,model3S0[,17],xlab=expression(rho),ylab = '',main = 'F1-score',type = 'b',xlim = c(0.1,1.4),ylim = c(0,1), xaxt="n")
+v1=rholist
+v2=paste(rholist)
+axis(1,v1)
+lines(rholist,model3S1[,17],type = 'b',lty=2)
+lines(rholist,model3elnet[,17],type = 'b',lty=3)
+lines(rholist,model3gscca[,17],type = 'b',lty=4)
+legend('topright',legend = c('S0CCA','SCCA','ENSCCA','GSCCA'),lty=c(1,2,3,4))
+```
+## Session information
+
+<!-- Insert the session information into the document -->
+```{r session-info}
+```
