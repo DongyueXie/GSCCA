@@ -14,7 +14,8 @@ All the codes are in the R pakcage scca. See [Github](https://github.com/Dongyue
 
 These are the simulations for the project.
 
-1.[Model 1](model1.html)
+1. [Model 1](model1.html)
+2. [Model 2](model2.html)
 
 
 #Credits
