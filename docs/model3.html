@@ -322,7 +322,7 @@ shared across the workflowr files. -->
 <p><strong>Last updated:</strong> 2017-12-29</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> a9c327a</p>
+<p><strong>Code version:</strong> cbae90c</p>
 <!-- Add your analysis here -->
 <p>Model 3 examines the effect of auto-regressive correlation.</p>
 <pre class="r"><code>library(scca)
@@ -342,7 +342,7 @@ for(rho in 1:length(rholist)){
   model3S1=rbind(model3S1,finals(s1cca_simu(10,u,v,50,&#39;normal&#39;,1,sigma_x,sigma_y)))
   model3elnet=rbind(model3elnet,finals(elnet.cca.simu(10,u,v,50,&#39;normal&#39;,1,sigma_x,sigma_y)))
   model3gscca=rbind(model3gscca,finals(gscca.simu.normal(10,edges,u,v,50,&#39;normal&#39;,1,sigma_x,sigma_y,
-                                                         gamma.u = 2.12,gamma.v = 2.12)))
+                                                         gamma.u = c(2.12,2.6,3,3.5,4),gamma.v = c(2.12,2.6,3,3.5,4))))
 }
 
 #TPR_u
