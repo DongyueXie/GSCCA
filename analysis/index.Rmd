@@ -14,10 +14,13 @@ All the codes are in the R pakcage scca. See [Github](https://github.com/Dongyue
 
 These are the simulations for the project.
 
-1. [Model 1](model1.html)
-2. [Model 2](model2.html)
-3. [Model 3](model3.html)
-
+1. [Model 1](model1.html): First look.
+2. [Model 2](model2.html): Effect of correlation strength.
+3. [Model 3](model3.html): Effect of auto-regressive correlation.
+4. [Model 4](model4.html): Complex model.
+5. [Model 5](model5.html): Effect of dimension.
+6. [Model 6](model6.html): Effect of sample size.
+7. [ROC](roc.html)
 
 
 #Credits
