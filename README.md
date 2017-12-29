@@ -1,5 +1,5 @@
 # GSCCA
 
-A [workflowr][] project.
 
-[workflowr]: https://github.com/jdblischak/workflowr
+https://dongyuexie.github.io/GSCCA/
+
