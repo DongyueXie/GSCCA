@@ -1,0 +1,110 @@
+---
+title: "Model 2 Simulation"
+author: "Dongyue Xie"
+output: html_document
+---
+
+<!-- The file analysis/chunks.R contains chunks that define default settings
+shared across the workflowr files. -->
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+<!-- Update knitr chunk options -->
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+<!-- Insert the date the file was last updated -->
+```{r last-updated, echo=FALSE, results='asis'}
+```
+
+<!-- Insert the code version (Git commit SHA1) if Git repository exists and R
+ package git2r is installed -->
+```{r code-version, echo=FALSE, results='asis'}
+```
+
+<!-- Add your analysis here -->
+
+Model 2 examines the effect of correlation strength.
+```{r,warning=FALSE,message=FALSE}
+library(scca)
+u=c(rep(1,10),rep(-1,10),rep(0,80))
+v=c(rep(c(1,0.2),5),rep(c(-1,-0.2),5),rep(0,80))
+```
+
+```{r,warning=FALSE,message=FALSE}
+sigma_x=arcov(0.7,100)
+sigma_y=sigma_x
+edges=c(as.numeric(combn(1:10,2)),as.numeric(combn(11:20,2)),21:100)
+```
+
+```{r,warning=FALSE,message=FALSE}
+szlist=c(0.1,0.3,0.5,0.7,0.9,1.5,2)
+model2S0=c()
+model2S1=c()
+model2elnet=c()
+model2gscca=c()
+for(sz in 1:length(szlist)){
+  model2S0=rbind(model2S0,finals(s0cca_simu(1,u,v,50,'normal',szlist[sz],sigma_x,sigma_y)))
+  model2S1=rbind(model2S1,finals(s1cca_simu(1,u,v,50,'normal',szlist[sz],sigma_x,sigma_y)))
+  model2elnet=rbind(model2elnet,finals(elnet.cca.simu(1,u,v,50,'normal',szlist[sz],sigma_x,sigma_y)))
+  model2gscca=rbind(model2gscca,finals(gscca.simu.normal(1,edges,u,v,50,'normal',szlist[sz],sigma_x,sigma_y,gamma.u = 2.12,gamma.v = 2.12)))
+}
+```
+
+TPR and FPR when selecting x
+
+```{r}
+plot(szlist,model2S0[,1],xlab=expression(sigma[z]),ylab = '',main = 'TPR and FPR for selecting X',type = 'b',ylim = c(0,1), xaxt="n")
+v1=szlist
+v2=paste(szlist)
+axis(1,v1)
+lines(szlist,model2S1[,1],type = 'b',lty=2)
+lines(szlist,model2elnet[,1],type = 'b',lty=3)
+lines(szlist,model2gscca[,1],type = 'b',lty=4)
+#FPR_u
+lines(szlist,model2S0[,3],type = 'b',col=4,pch=8)
+lines(szlist,model2S1[,3],type = 'b',lty=2,col=4,pch=8)
+lines(szlist,model2elnet[,3],type = 'b',lty=3,col=4,pch=8)
+lines(szlist,model2gscca[,3],type = 'b',lty=4,col=4,pch=8)
+legend('topleft',legend = c('S0CCA','SCCA','ENSCCA','GSCCA','TPR','FPR'),lty=c(1,2,3,4,NA,NA),pch=c(NA,NA,NA,NA,1,8),col = c(1,1,1,1,1,4))
+
+```
+
+
+TPR and FPR when selecting y
+```{r}
+#TPR_v
+plot(szlist,model2S0[,5],xlab=expression(sigma[z]),ylab = '',main = 'TPR and FPR for selecting Y',type = 'b',ylim = c(0,1), xaxt="n")
+v1=szlist
+v2=paste(szlist)
+axis(1,v1)
+lines(szlist,model2S1[,5],type = 'b',lty=2)
+lines(szlist,model2elnet[,5],type = 'b',lty=3)
+lines(szlist,model2gscca[,5],type = 'b',lty=4)
+#FPR_v
+lines(szlist,model2S0[,7],type = 'b',col=4,pch=8)
+lines(szlist,model2S1[,7],type = 'b',lty=2,col=4,pch=8)
+lines(szlist,model2elnet[,7],type = 'b',lty=3,col=4,pch=8)
+lines(szlist,model2gscca[,7],type = 'b',lty=4,col=4,pch=8)
+legend('topleft',legend = c('S0CCA','SCCA','ENSCCA','GSCCA','TPR','FPR'),lty=c(1,2,3,4,NA,NA),pch=c(NA,NA,NA,NA,1,8),col = c(1,1,1,1,1,4))
+
+```
+
+F1-score 
+```{r}
+#F1
+plot(szlist,model2S0[,17],xlab=expression(sigma[z]),ylab = '',main = 'F1-score',type = 'b',ylim = c(0,1), xaxt="n")
+v1=szlist
+v2=paste(szlist)
+axis(1,v1)
+lines(szlist,model2S1[,17],type = 'b',lty=2)
+lines(szlist,model2elnet[,17],type = 'b',lty=3)
+lines(szlist,model2gscca[,17],type = 'b',lty=4)
+legend('topleft',legend = c('S0CCA','SCCA','ENSCCA','GSCCA'),lty=c(1,2,3,4))
+```
+## Session information
+
+<!-- Insert the session information into the document -->
+```{r session-info}
+```
