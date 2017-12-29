@@ -16,6 +16,8 @@ These are the simulations for the project.
 
 1. [Model 1](model1.html)
 2. [Model 2](model2.html)
+3. [Model 3](model3.html)
+
 
 
 #Credits
