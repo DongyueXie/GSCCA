@@ -32,7 +32,7 @@ u=c(rep(1,10),rep(-1,10),rep(0,80))
 v=c(rep(c(1,0.2),5),rep(c(-1,-0.2),5),rep(0,80))
 edges=c(as.numeric(combn(1:10,2)),as.numeric(combn(11:20,2)),21:100)
 
-rholist=seq(0.1,0.9,length.out = 9)
+rholist=seq(0.1,1,length.out = 10)
 model3S0=c()
 model3S1=c()
 model3elnet=c()
@@ -43,7 +43,7 @@ for(rho in 1:length(rholist)){
   model3S0=rbind(model3S0,finals(s0cca_simu(1,u,v,50,'normal',1,sigma_x,sigma_y)))
   model3S1=rbind(model3S1,finals(s1cca_simu(1,u,v,50,'normal',1,sigma_x,sigma_y)))
   model3elnet=rbind(model3elnet,finals(elnet.cca.simu(1,u,v,50,'normal',1,sigma_x,sigma_y)))
-  model3gscca=rbind(model3gscca,finals(gscca.simu.normal(10,edges,u,v,50,'normal',1,sigma_x,sigma_y,plain=F)))
+  model3gscca=rbind(model3gscca,finals(gscca.simu.normal(10,edges,u,v,50,'normal',1,sigma_x,sigma_y,plain=F,gamma.u = 2.12,gamma.v = 2.12)))
 }
 
 #TPR_u
