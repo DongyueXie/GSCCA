@@ -5,4 +5,4 @@ output:
     toc: false
 ---
 
-Describe your project.
+This project is served as my master thesis. I am graduating from the University of Chicago as a master student in statistics in March 2018.  

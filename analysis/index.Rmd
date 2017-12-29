@@ -5,11 +5,18 @@ output:
     toc: false
 ---
 
-The goal of this new template is to simplify the setup and maintenance of a research website.
-Specifically,
+#Project Overview
+This project studies Generalized Sparse Canonical Correlation Analysis and compare its performance with the standard sparse canonica correlation ananlysis.
 
-*  Easier to build and extend the website using the new tools in the [rmarkdown][] package and [latest RStudio release][rstudio]
-*  Easier to deploy the website with Git and GitHub by only using one branch
+All the codes are in the R pakcage scca. See [Github](https://github.com/DongyueXie/scca).
 
-[rmarkdown]: http://rmarkdown.rstudio.com/rmarkdown_websites.htm
-[rstudio]: https://www.rstudio.com/products/rstudio/download/preview/
+#Analysis
+
+These are the simulations for the project.
+
+1.[Model 1](model1.html)
+
+
+#Credits
+
+Thanks to Professor [Dan Nicolae](https://galton.uchicago.edu/~nicolae/) for his great help.

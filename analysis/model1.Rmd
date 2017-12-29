@@ -1,0 +1,96 @@
+---
+title: "Model 1 Simulation"
+author: "Dongyue Xie"
+output: html_document
+---
+
+<!-- The file analysis/chunks.R contains chunks that define default settings
+shared across the workflowr files. -->
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+<!-- Update knitr chunk options -->
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+<!-- Insert the date the file was last updated -->
+```{r last-updated, echo=FALSE, results='asis'}
+```
+
+<!-- Insert the code version (Git commit SHA1) if Git repository exists and R
+ package git2r is installed -->
+```{r code-version, echo=FALSE, results='asis'}
+```
+
+<!-- Add your analysis here -->
+
+```{r,warning=FALSE,message=FALSE}
+library(scca)
+u=c(rep(1,10),rep(-1,10),rep(0,80))
+v=c(rep(c(1,0.2),5),rep(c(-1,-0.2),5),rep(0,80))
+```
+The true u is 
+```{r}
+plot(u)
+```
+The true v is
+```{r}
+plot(v)
+```
+
+```{r,warning=FALSE,message=FALSE}
+sigma_x=arcov(0.7,100)
+sigma_y=sigma_x
+edges=c(as.numeric(combn(1:10,2)),as.numeric(combn(11:20,2)),21:100)
+model1S0=s0cca_simu(12,u,v,50,'normal',1,sigma_x,sigma_y)
+model1S1=s1cca_simu(12,u,v,50,'normal',1,sigma_x,sigma_y)
+model1elnet=elnet.cca.simu(12,u,v,50,'normal',1,sigma_x,sigma_y)
+model1gscca=gscca.simu.normal(12,edges,u,v,50,'normal',1,sigma_x,sigma_y)
+```
+
+Plot the results: Variable selection performance for x and y
+```{r,warning=FALSE,message=FALSE}
+plot(c(finals(model1S0)[1],finals(model1S1)[1],finals(model1elnet)[1],finals(model1gscca)[1]),type = 'b',ylim = c(0,1), xaxt="n",
+     ylab='',xlab='',main = 'Variable selection of x')
+lines(c(finals(model1S0)[3],finals(model1S1)[3],finals(model1elnet)[3],finals(model1gscca)[3]),type = 'b',lty=2)
+lines(c(finals(model1S0)[13],finals(model1S1)[13],finals(model1elnet)[13],finals(model1gscca)[13]),type = 'b',lty=3)
+legend('topleft',legend=c('TPR','FPR','F1-score'),lty=c(1,2,3))
+v1=c(1,2,3,4)
+v2=c('S0CCA','SCCA','ENSCCA','GSCCA')
+axis(1,v1,v2)
+```
+```{r,warning=FALSE,message=FALSE}
+plot(c(finals(model1S0)[5],finals(model1S1)[5],finals(model1elnet)[5],finals(model1gscca)[5]),type = 'b',ylim = c(0,1), xaxt="n",
+     ylab='',xlab='',main = 'Variable selection of y')
+lines(c(finals(model1S0)[7],finals(model1S1)[7],finals(model1elnet)[7],finals(model1gscca)[7]),type = 'b',lty=2)
+lines(c(finals(model1S0)[15],finals(model1S1)[15],finals(model1elnet)[15],finals(model1gscca)[15]),type = 'b',lty=3)
+legend('topleft',legend=c('TPR','FPR','F1-score'),lty=c(1,2,3))
+v1=c(1,2,3,4)
+v2=c('S0CCA','SCCA','ENSCCA','GSCCA')
+axis(1,v1,v2)
+```
+
+Compare the estimated coefficients
+```{r,warning=FALSE,message=FALSE}
+par(mfrow=c(2,3))
+plot(u,xlab = '',ylab = '',main = 'True u')
+plot(model1S0$us[,12],xlab = '',ylab = '' ,main = expression(S[0]~CCA))
+plot(-model1S1$us[,12],xlab = '',ylab = '',main='SCCA')
+plot(-model1elnet$us[,12],xlab = '',ylab = '',main = 'ENSCCA')
+plot(-model1gscca$us[,12],xlab = '',ylab = '',main='GSCCA')
+```
+
+```{r,warning=FALSE,message=FALSE}
+par(mfrow=c(2,3))
+plot(v,xlab = '',ylab = '',main = 'True v')
+plot(model1S0$vs[,12],xlab = '',ylab = '' ,main = expression(S[0]~CCA))
+plot(-model1S1$vs[,12],xlab = '',ylab = '',main='SCCA')
+plot(-model1elnet$vs[,12],xlab = '',ylab = '',main = 'ENSCCA')
+plot(-model1gscca$vs[,12],xlab = '',ylab = '',main='GSCCA')
+```
+## Session information
+
+<!-- Insert the session information into the document -->
+```{r session-info}
+```
