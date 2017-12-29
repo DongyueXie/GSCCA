@@ -1,0 +1,80 @@
+---
+title: "Model 4 Simulation"
+author: "Dongyue Xie"
+date: YYYY-MM-DD
+output: html_document
+---
+
+<!-- The file analysis/chunks.R contains chunks that define default settings
+shared across the workflowr files. -->
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+<!-- Update knitr chunk options -->
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+<!-- Insert the date the file was last updated -->
+```{r last-updated, echo=FALSE, results='asis'}
+```
+
+<!-- Insert the code version (Git commit SHA1) if Git repository exists and R
+ package git2r is installed -->
+```{r code-version, echo=FALSE, results='asis'}
+```
+
+<!-- Add your analysis here -->
+
+# Situation 1
+In this simulation, the correlation between ${x}$ and ${y}$ is induced by two orthogonal directions.
+```{r,warning=FALSE,message=FALSE}
+library(scca)
+
+#situation 1
+GenStrucData_Normal=function(u,v,n=50,sigma_z=1,sigma_x=NULL,sigma_y=NULL){
+  p=length(u)
+  q=length(v)
+  if(is.null(sigma_x)){sigma_x=diag(1,p,p)}
+  if(is.null(sigma_y)){sigma_y=diag(1,q,q)}
+  x=c()
+  y=c()
+  u1=u;v1=v
+  u2=0.5*(-u1);v2=0.5*(-v1)
+  for(i in 1:n){
+    zi1=rnorm(1,0,sigma_z)
+    zi2=rnorm(1,0,sigma_z)
+    xi=zi1*u1+zi2*u2+mvrnorm(1,rep(0,p),sigma_x)
+    x=rbind(x,xi)
+    yi=zi1*v1+zi2*v2+mvrnorm(1,rep(0,q),sigma_y)
+    y=rbind(y,yi)
+  }
+  #print (sigma_x, sigma_y, sigma_z)
+  return(list(x=x,y=y))
+}
+
+sigma_x = arcov(0.7,100)
+sigma_y=sigma_x
+
+edges=c(as.numeric(combn(1:10,2)),as.numeric(combn(11:20,2)),21:100)
+
+u=c(rep(1,10),rep(-1,10),rep(0,80))
+v=u
+model4S0s1=finals(s0cca_simu(10,u,v,50,'normal',1,sigma_x,sigma_y))
+model4S1s1=finals(s1cca_simu(10,u,v,50,'normal',1,sigma_x,sigma_y))
+model4elnets1=finals(elnet.cca.simu(10,u,v,50,'normal',1,sigma_x,sigma_y))
+model4gsccas1=finals(gscca.simu.normal(10,edges,u,v,50,'normal',1,sigma_x,sigma_y))
+```
+
+```{r}
+model4S0s1
+model4S1s1
+model4elnets1
+model4gsccas1
+```
+
+## Session information
+
+<!-- Insert the session information into the document -->
+```{r session-info}
+```
