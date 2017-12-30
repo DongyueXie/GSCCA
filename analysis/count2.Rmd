@@ -35,10 +35,10 @@ v=c(rep(c(1,0.2),5),rep(c(-1,-0.2),5),rep(0,80))
 sigma_x=arcov(0.7,100)
 sigma_y=sigma_x
 edges=c(as.numeric(combn(1:10,2)),as.numeric(combn(11:20,2)),21:100)
-countlS0=finals(s0cca_simu(100,u,v,50,'count_latent',2,sigma_x,sigma_y))
-countlS1=finals(s1cca_simu(100,u,v,50,'count_latent',2,sigma_x,sigma_y))
-countlelnet=finals(elnet.cca.simu(100,u,v,50,'count_latent',2,sigma_x,sigma_y))
-countlgscca=finals(gscca.simu.normal(100,edges,u,v,50,'count_latent',2,sigma_x,sigma_y,gamma.u = c(1.3),gamma.v = c(1.3)))
+countlS0=finals(s0cca_simu(100,u,v,50,'count_latent',2,sigma_x,sigma_y,lambda_z = 20))
+countlS1=finals(s1cca_simu(100,u,v,50,'count_latent',2,sigma_x,sigma_y,lambda_z = 20))
+countlelnet=finals(elnet.cca.simu(100,u,v,50,'count_latent',2,sigma_x,sigma_y,lambda_z = 20))
+countlgscca=finals(gscca.simu.normal(100,edges,u,v,50,'count_latent',2,sigma_x,sigma_y,gamma.u=1,gamma.v=0.7,lambda_z = 20))
 ```
 
 ```{r}
