@@ -1,0 +1,259 @@
+---
+title: "Receiver operating characteristic"
+author: "Dongyue Xie"
+date: YYYY-MM-DD
+output: html_document
+---
+
+<!-- The file analysis/chunks.R contains chunks that define default settings
+shared across the workflowr files. -->
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+<!-- Update knitr chunk options -->
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+<!-- Insert the date the file was last updated -->
+```{r last-updated, echo=FALSE, results='asis'}
+```
+
+<!-- Insert the code version (Git commit SHA1) if Git repository exists and R
+ package git2r is installed -->
+```{r code-version, echo=FALSE, results='asis'}
+```
+
+<!-- Add your analysis here -->
+
+# Normal Latent variable model
+
+## Model 1
+
+```{r,warning=FALSE,message=FALSE}
+library(scca)
+u=c(rep(1,10),rep(-1,10),rep(0,80))
+v=c(rep(c(1,0.2),5),rep(c(-1,-0.2),5),rep(0,80))
+sigma_x=arcov(0.7,100)
+sigma_y=sigma_x
+edges=c(as.numeric(combn(1:10,2)),as.numeric(combn(11:20,2)),21:100)
+rocs=roc.simu(1,u,v,sigma_x = sigma_x,sigma_y = sigma_y,edges = edges)
+
+tt=cbind(rocs$mats0[,2],rocs$mats0[,1])
+tt=tt[order(tt[,1]),]
+plot(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),xlab='False Positive Rate',ylab='True Positive Rate')
+tt=cbind(rocs$mats1[,2],rocs$mats1[,1])
+tt=tt[order(tt[,1]),]
+lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=2)
+tt=cbind(rocs$matelnet[,2],rocs$matelnet[,1])
+tt=tt[order(tt[,1]),]
+lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=3)
+tt=cbind(rocs$matgscca[,2],rocs$matgscca[,1])
+tt=tt[order(tt[,1]),]
+idx=seq(1,nrow(tt),length.out=min(c(nrow(tt)/10,10000)))
+lines(tt[,1][idx],moav(tt[,2][idx],length(idx)/25),type='l',xlim=c(0,1),ylim=c(0,1),col=4)
+#lines(tt[,1],moav(tt[,2],floor(nrow(tt)/15)),type='l',xlim=c(0,1),ylim=c(0,1),col=4)
+abline(0,1,lty=3)
+legend('bottomright',legend = c('S0CCA','SCCA','ENSCCA','GSCCA'),lty = c(1,1,1,1),col = c(1,2,3,4))
+
+tt=cbind(rocs$mats0[,4],rocs$mats0[,3])
+tt=tt[order(tt[,1]),]
+plot(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),xlab='False Positive Rate',ylab='True Positive Rate')
+tt=cbind(rocs$mats1[,4],rocs$mats1[,3])
+tt=tt[order(tt[,1]),]
+lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=2)
+tt=cbind(rocs$matelnet[,4],rocs$matelnet[,3])
+tt=tt[order(tt[,1]),]
+lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=3)
+tt=cbind(rocs$matgscca[,4],rocs$matgscca[,3])
+tt=tt[order(tt[,1]),]
+idx=seq(1,nrow(tt),length.out=min(c(nrow(tt)/10,10000)))
+lines(tt[,1][idx],moav(tt[,2][idx],length(idx)/25),type='l',xlim=c(0,1),ylim=c(0,1),col=4)
+#lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=4)
+abline(0,1,lty=3)
+legend('bottomright',legend = c('S0CCA','SCCA','ENSCCA','GSCCA'),lty = c(1,1,1,1),col = c(1,2,3,4))
+
+```
+
+## Model 4
+
+Situation 1
+```{r,warning=FALSE,message=FALSE}
+#u=c(rep(1,10),rep(-1,10),rep(0,80))
+u=c(rep(c(1,0.5),10),rep(0,80))
+v=u
+rocs=roc.simu(1,u,v,sigma_x = sigma_x,sigma_y = sigma_y,edges = edges,data.type = "normal_oth")
+
+tt=cbind(rocs$mats0[,2],rocs$mats0[,1])
+tt=tt[order(tt[,1]),]
+plot(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),xlab='False Positive Rate',ylab='True Positive Rate')
+tt=cbind(rocs$mats1[,2],rocs$mats1[,1])
+tt=tt[order(tt[,1]),]
+lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=2)
+tt=cbind(rocs$matelnet[,2],rocs$matelnet[,1])
+tt=tt[order(tt[,1]),]
+lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=3)
+tt=cbind(rocs$matgscca[,2],rocs$matgscca[,1])
+tt=tt[order(tt[,1]),]
+idx=seq(1,nrow(tt),length.out=min(c(nrow(tt)/10,10000)))
+lines(tt[,1][idx],moav(tt[,2][idx],length(idx)/25),type='l',xlim=c(0,1),ylim=c(0,1),col=4)
+#lines(tt[,1],moav(tt[,2],floor(nrow(tt)/15)),type='l',xlim=c(0,1),ylim=c(0,1),col=4)
+abline(0,1,lty=3)
+legend('bottomright',legend = c('S0CCA','SCCA','ENSCCA','GSCCA'),lty = c(1,1,1,1),col = c(1,2,3,4))
+
+tt=cbind(rocs$mats0[,4],rocs$mats0[,3])
+tt=tt[order(tt[,1]),]
+plot(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),xlab='False Positive Rate',ylab='True Positive Rate')
+tt=cbind(rocs$mats1[,4],rocs$mats1[,3])
+tt=tt[order(tt[,1]),]
+lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=2)
+tt=cbind(rocs$matelnet[,4],rocs$matelnet[,3])
+tt=tt[order(tt[,1]),]
+lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=3)
+tt=cbind(rocs$matgscca[,4],rocs$matgscca[,3])
+tt=tt[order(tt[,1]),]
+idx=seq(1,nrow(tt),length.out=min(c(nrow(tt)/10,10000)))
+lines(tt[,1][idx],moav(tt[,2][idx],length(idx)/25),type='l',xlim=c(0,1),ylim=c(0,1),col=4)
+#lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=4)
+abline(0,1,lty=3)
+legend('bottomright',legend = c('S0CCA','SCCA','ENSCCA','GSCCA'),lty = c(1,1,1,1),col = c(1,2,3,4))
+```
+
+Situation 2
+```{r,warning=FALSE,message=FALSE}
+#u=c(rep(c(1,-1),10),rep(0,80))
+#v=u
+u=c(rep(c(0.5,-0.5),10),rep(0,80))
+v=u
+rocs=roc.simu(1,u,v,sigma_x = sigma_x,sigma_y = sigma_y,edges = edges,data.type = "normal_mis",plain=F)
+
+tt=cbind(rocs$mats0[,2],rocs$mats0[,1])
+tt=tt[order(tt[,1]),]
+plot(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),xlab='False Positive Rate',ylab='True Positive Rate')
+tt=cbind(rocs$mats1[,2],rocs$mats1[,1])
+tt=tt[order(tt[,1]),]
+lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=2)
+tt=cbind(rocs$matelnet[,2],rocs$matelnet[,1])
+tt=tt[order(tt[,1]),]
+lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=3)
+tt=cbind(rocs$matgscca[,2],rocs$matgscca[,1])
+tt=tt[order(tt[,1]),]
+idx=seq(1,nrow(tt),length.out=min(c(nrow(tt)/10,10000)))
+lines(tt[,1][idx],moav(tt[,2][idx],length(idx)/25),type='l',xlim=c(0,1),ylim=c(0,1),col=4)
+#lines(tt[,1],moav(tt[,2],floor(nrow(tt)/15)),type='l',xlim=c(0,1),ylim=c(0,1),col=4)
+abline(0,1,lty=3)
+legend('bottomright',legend = c('S0CCA','SCCA','ENSCCA','GSCCA'),lty = c(1,1,1,1),col = c(1,2,3,4))
+
+tt=cbind(rocs$mats0[,4],rocs$mats0[,3])
+tt=tt[order(tt[,1]),]
+plot(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),xlab='False Positive Rate',ylab='True Positive Rate')
+tt=cbind(rocs$mats1[,4],rocs$mats1[,3])
+tt=tt[order(tt[,1]),]
+lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=2)
+tt=cbind(rocs$matelnet[,4],rocs$matelnet[,3])
+tt=tt[order(tt[,1]),]
+lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=3)
+tt=cbind(rocs$matgscca[,4],rocs$matgscca[,3])
+tt=tt[order(tt[,1]),]
+idx=seq(1,nrow(tt),length.out=min(c(nrow(tt)/10,10000)))
+lines(tt[,1][idx],moav(tt[,2][idx],length(idx)/25),type='l',xlim=c(0,1),ylim=c(0,1),col=4)
+#lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=4)
+abline(0,1,lty=3)
+legend('bottomright',legend = c('S0CCA','SCCA','ENSCCA','GSCCA'),lty = c(1,1,1,1),col = c(1,2,3,4))
+```
+
+# Count data
+
+## From Normal case
+
+```{r,warning=FALSE,message=FALSE}
+u=c(rep(1,10),rep(-1,10),rep(0,80))
+v=c(rep(c(1,0.2),5),rep(c(-1,-0.2),5),rep(0,80))
+sigma_x=arcov(0.7,100)
+sigma_y=sigma_x
+edges=c(as.numeric(combn(1:10,2)),as.numeric(combn(11:20,2)),21:100)
+
+rocs=roc.simu(1,u,v,sigma_x = sigma_x,sigma_y = sigma_y,edges = edges,sigma_z = 2,data.type = "count_normal",gamma.u = seq(0,2,length.out = 10),gamma.v = seq(0,2,length.out = 10),maxstep_gs = 20)
+
+tt=cbind(rocs$mats0[,2],rocs$mats0[,1])
+tt=tt[order(tt[,1]),]
+plot(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),xlab='False Positive Rate',ylab='True Positive Rate')
+tt=cbind(rocs$mats1[,2],rocs$mats1[,1])
+tt=tt[order(tt[,1]),]
+lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=2)
+tt=cbind(rocs$matelnet[,2],rocs$matelnet[,1])
+tt=tt[order(tt[,1]),]
+lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=3)
+tt=cbind(rocs$matgscca[,2],rocs$matgscca[,1])
+tt=tt[order(tt[,1]),]
+idx=seq(1,nrow(tt),length.out=min(c(nrow(tt)/10,10000)))
+lines(tt[,1][idx],moav(tt[,2][idx],length(idx)/10),type='l',xlim=c(0,1),ylim=c(0,1),col=4)
+#lines(tt[,1],moav(tt[,2],floor(nrow(tt)/15)),type='l',xlim=c(0,1),ylim=c(0,1),col=4)
+abline(0,1,lty=3)
+legend('bottomright',legend = c('S0CCA','SCCA','ENSCCA','GSCCA'),lty = c(1,1,1,1),col = c(1,2,3,4))
+
+tt=cbind(rocs$mats0[,4],rocs$mats0[,3])
+tt=tt[order(tt[,1]),]
+plot(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),xlab='False Positive Rate',ylab='True Positive Rate')
+tt=cbind(rocs$mats1[,4],rocs$mats1[,3])
+tt=tt[order(tt[,1]),]
+lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=2)
+tt=cbind(rocs$matelnet[,4],rocs$matelnet[,3])
+tt=tt[order(tt[,1]),]
+lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=3)
+tt=cbind(rocs$matgscca[,4],rocs$matgscca[,3])
+tt=tt[order(tt[,1]),]
+idx=seq(1,nrow(tt),length.out=min(c(nrow(tt)/10,10000)))
+lines(tt[,1][idx],moav(tt[,2][idx],length(idx)/25),type='l',xlim=c(0,1),ylim=c(0,1),col=4)
+#lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=4)
+abline(0,1,lty=3)
+legend('bottomright',legend = c('S0CCA','SCCA','ENSCCA','GSCCA'),lty = c(1,1,1,1),col = c(1,2,3,4))
+```
+
+## From Latent variable model
+
+```{r,warning=FALSE,message=FALSE}
+rocs=roc.simu(1,u,v,sigma_x = sigma_x,sigma_y = sigma_y,edges = edges,data.type = "count_latent",lambda_z = 20,gamma.u = seq(0,2,length.out = 10),gamma.v = seq(0,2,length.out = 10),maxstep_gs = 20)
+
+tt=cbind(rocs$mats0[,2],rocs$mats0[,1])
+tt=tt[order(tt[,1]),]
+plot(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),xlab='False Positive Rate',ylab='True Positive Rate')
+tt=cbind(rocs$mats1[,2],rocs$mats1[,1])
+tt=tt[order(tt[,1]),]
+lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=2)
+tt=cbind(rocs$matelnet[,2],rocs$matelnet[,1])
+tt=tt[order(tt[,1]),]
+lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=3)
+tt=cbind(rocs$matgscca[,2],rocs$matgscca[,1])
+tt=tt[order(tt[,1]),]
+idx=seq(1,nrow(tt),length.out=min(c(nrow(tt)/10,10000)))
+lines(tt[,1][idx],moav(tt[,2][idx],length(idx)/25),type='l',xlim=c(0,1),ylim=c(0,1),col=4)
+#lines(tt[,1],moav(tt[,2],floor(nrow(tt)/15)),type='l',xlim=c(0,1),ylim=c(0,1),col=4)
+abline(0,1,lty=3)
+legend('bottomright',legend = c('S0CCA','SCCA','ENSCCA','GSCCA'),lty = c(1,1,1,1),col = c(1,2,3,4))
+
+tt=cbind(rocs$mats0[,4],rocs$mats0[,3])
+tt=tt[order(tt[,1]),]
+plot(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),xlab='False Positive Rate',ylab='True Positive Rate')
+tt=cbind(rocs$mats1[,4],rocs$mats1[,3])
+tt=tt[order(tt[,1]),]
+lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=2)
+tt=cbind(rocs$matelnet[,4],rocs$matelnet[,3])
+tt=tt[order(tt[,1]),]
+lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=3)
+tt=cbind(rocs$matgscca[,4],rocs$matgscca[,3])
+tt=tt[order(tt[,1]),]
+idx=seq(1,nrow(tt),length.out=min(c(nrow(tt)/10,10000)))
+lines(tt[,1][idx],moav(tt[,2][idx],length(idx)/25),type='l',xlim=c(0,1),ylim=c(0,1),col=4)
+#lines(tt[,1],moav(tt[,2],floor(nrow(tt)/25)),type='l',xlim=c(0,1),ylim=c(0,1),col=4)
+abline(0,1,lty=3)
+legend('bottomright',legend = c('S0CCA','SCCA','ENSCCA','GSCCA'),lty = c(1,1,1,1),col = c(1,2,3,4))
+```
+
+
+
+## Session information
+
+<!-- Insert the session information into the document -->
+```{r session-info}
+```
