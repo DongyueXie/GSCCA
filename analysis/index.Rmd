@@ -20,7 +20,9 @@ These are the simulations for the project.
 4. [Model 4](model4.html): Complex model.
 5. [Model 5](model5.html): Effect of dimension.
 6. [Model 6](model6.html): Effect of sample size.
-7. [ROC](roc.html)
+7. [Count data 1](count1.html): Count data transformed from normal case
+8. [Count data 2](count2.html): Count data from latent variable model
+9. [ROC](roc.html)
 
 
 #Credits
