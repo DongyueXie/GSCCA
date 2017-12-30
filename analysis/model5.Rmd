@@ -1,0 +1,102 @@
+---
+title: "Model 5 Simulation"
+author: "Dongyue Xie"
+date: YYYY-MM-DD
+output: html_document
+---
+
+<!-- The file analysis/chunks.R contains chunks that define default settings
+shared across the workflowr files. -->
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+<!-- Update knitr chunk options -->
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+<!-- Insert the date the file was last updated -->
+```{r last-updated, echo=FALSE, results='asis'}
+```
+
+<!-- Insert the code version (Git commit SHA1) if Git repository exists and R
+ package git2r is installed -->
+```{r code-version, echo=FALSE, results='asis'}
+```
+
+<!-- Add your analysis here -->
+
+Model 2 examines the effect of dimension.
+```{r,warning=FALSE,message=FALSE}
+library(scca)
+
+u=c(rep(1,10),rep(-1,10),rep(0,80))
+v=c(rep(c(1,0.2),5),rep(c(-1,-0.2),5),rep(0,80))
+
+dlist=c(100,150,200,250,300,400,500)
+model5S0=c()
+model5S1=c()
+model5elnet=c()
+model5gscca=c()
+for(d in 1:length(dlist)){
+  ud=c(u,rep(0,dlist[d]-length(u)))
+  vd=c(v,rep(0,dlist[d]-length(v)))
+  sigma_x = arcov(0.7,dlist[d])
+  sigma_y=sigma_x
+  edges=c(as.numeric(combn(1:10,2)),as.numeric(combn(11:20,2)),21:dlist[d])
+  model5S0=rbind(model5S0,finals(s0cca_simu(30,ud,vd,50,'normal',1,sigma_x,sigma_y)))
+  model5S1=rbind(model5S1,finals(s1cca_simu(30,ud,vd,50,'normal',1,sigma_x,sigma_y)))
+  model5elnet=rbind(model5elnet,finals(elnet.cca.simu(30,ud,vd,50,'normal',1,sigma_x,sigma_y)))
+  model5gscca=rbind(model5gscca,finals(gscca.simu.normal(30,edges,ud,vd,50,'normal',1,sigma_x,sigma_y,gamma.u = 2.1213,gamma.v = 2.1213)))
+}
+
+```
+
+```{r}
+#TPR_u
+plot(dlist,model5S0[,1],xlab='Dimension',ylab = '',main = 'TPR and FPR for selecting X',type = 'b',xlim=c(100,700),ylim = c(0,1), xaxt="n")
+v1=dlist
+v2=paste(dlist)
+axis(1,v1)
+lines(dlist,model5S1[,1],type = 'b',lty=2)
+lines(dlist,model5elnet[,1],type = 'b',lty=3)
+lines(dlist,model5gscca[,1],type = 'b',lty=4)
+#FPR_u
+lines(dlist,model5S0[,3],type = 'b',col=4,pch=8)
+lines(dlist,model5S1[,3],type = 'b',lty=2,col=4,pch=8)
+lines(dlist,model5elnet[,3],type = 'b',lty=3,col=4,pch=8)
+lines(dlist,model5gscca[,3],type = 'b',lty=4,col=4,pch=8)
+legend('topright',legend = c('S0CCA','SCCA','ENSCCA','GSCCA','TPR','FPR'),lty=c(1,2,3,4,NA,NA),pch=c(NA,NA,NA,NA,1,8),col = c(1,1,1,1,1,4))
+
+#TPR_v
+plot(dlist,model5S0[,5],xlab='Dimension',ylab = '',main = 'TPR and FPR for selecting Y',type = 'b',xlim=c(100,700),ylim = c(0,1), xaxt="n")
+v1=dlist
+v2=paste(dlist)
+axis(1,v1)
+lines(dlist,model5S1[,5],type = 'b',lty=2)
+lines(dlist,model5elnet[,5],type = 'b',lty=3)
+lines(dlist,model5gscca[,5],type = 'b',lty=4)
+#FPR_v
+lines(dlist,model5S0[,7],type = 'b',col=4,pch=8)
+lines(dlist,model5S1[,7],type = 'b',lty=2,col=4,pch=8)
+lines(dlist,model5elnet[,7],type = 'b',lty=3,col=4,pch=8)
+lines(dlist,model5gscca[,7],type = 'b',lty=4,col=4,pch=8)
+legend('topright',legend = c('S0CCA','SCCA','ENSCCA','GSCCA','TPR','FPR'),lty=c(1,2,3,4,NA,NA),pch=c(NA,NA,NA,NA,1,8),col = c(1,1,1,1,1,4))
+#legend('bottomright',legend = c('TPR','FPR'),pch=c(1,8),col=c(1,4))
+
+```
+```{r}
+plot(dlist,model5S0[,17],xlab='Dimension',ylab = '',main = 'F1-score',type = 'b',xlim=c(100,700),ylim = c(0,1), xaxt="n")
+v1=dlist
+v2=paste(dlist)
+axis(1,v1)
+lines(dlist,model5S1[,17],type = 'b',lty=2)
+lines(dlist,model5elnet[,17],type = 'b',lty=3)
+lines(dlist,model5gscca[,17],type = 'b',lty=4)
+legend('topright',legend = c('S0CCA','SCCA','ENSCCA','GSCCA'),lty=c(1,2,3,4))
+```
+## Session information
+
+<!-- Insert the session information into the document -->
+```{r session-info}
+```
