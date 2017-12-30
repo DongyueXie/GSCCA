@@ -320,10 +320,10 @@ div.section {
 shared across the workflowr files. -->
 <!-- Update knitr chunk options -->
 <!-- Insert the date the file was last updated -->
-<p><strong>Last updated:</strong> 2017-12-29</p>
+<p><strong>Last updated:</strong> 2017-12-30</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> b2024f2</p>
+<p><strong>Code version:</strong> 241dcba</p>
 <!-- Add your analysis here -->
 <div id="situation-1" class="section level1">
 <h1>Situation 1</h1>
@@ -335,66 +335,77 @@ sigma_y=sigma_x
 
 edges=c(as.numeric(combn(1:10,2)),as.numeric(combn(11:20,2)),21:100)
 
-u=c(rep(1,10),rep(-1,10),rep(0,80))
+#u=c(rep(1,10),rep(-1,10),rep(0,80))
+u=c(rep(c(1,0.5),10),rep(0,80))
 v=u
-model4S0s1=finals(s0cca_simu(30,u,v,50,&#39;normal_oth&#39;,1,sigma_x,sigma_y))
-model4S1s1=finals(s1cca_simu(30,u,v,50,&#39;normal_oth&#39;,1,sigma_x,sigma_y))
-model4elnets1=finals(elnet.cca.simu(30,u,v,50,&#39;normal_oth&#39;,1,sigma_x,sigma_y))
-model4gsccas1=finals(gscca.simu.normal(30,edges,u,v,50,&#39;normal_oth&#39;,1,sigma_x,sigma_y))</code></pre>
+model4S0s1=finals(s0cca_simu(100,u,v,50,&#39;normal_oth&#39;,1,sigma_x,sigma_y))
+model4S1s1=finals(s1cca_simu(100,u,v,50,&#39;normal_oth&#39;,1,sigma_x,sigma_y))
+model4elnets1=finals(elnet.cca.simu(100,u,v,50,&#39;normal_oth&#39;,1,sigma_x,sigma_y))
+model4gsccas1=finals(gscca.simu.normal(100,edges,u,v,50,&#39;normal_oth&#39;,1,sigma_x,sigma_y))</code></pre>
 <pre class="r"><code>model4S0s1</code></pre>
 <pre><code>      TPR_u sd_TPR_u FPR_u sd_FPR_u  TPR_v sd_TPR_v FPR_v sd_FPR_v    TPR
-[1,] 0.2833   0.1615     0        0 0.3083   0.1867     0        0 0.2958
-     sd_TPR FPR sd_FPR   F1_u sd_F1_u   F1_v sd_F1_v     F1  sd_F1    Cor
-[1,] 0.1667   0      0 0.4189  0.1877 0.4424  0.2115 0.4326 0.1939 0.8392</code></pre>
+[1,] 0.1795   0.1146 4e-04   0.0021 0.1855   0.1136 1e-04   0.0012 0.1825
+     sd_TPR   FPR sd_FPR   F1_u sd_F1_u   F1_v sd_F1_v    F1  sd_F1    Cor
+[1,] 0.1083 2e-04 0.0012 0.2901  0.1432 0.2991  0.1453 0.296 0.1366 0.7725</code></pre>
 <pre class="r"><code>model4S1s1</code></pre>
-<pre><code>      TPR_u sd_TPR_u FPR_u sd_FPR_u  TPR_v sd_TPR_v FPR_v sd_FPR_v    TPR
-[1,] 0.6417   0.0852     0        0 0.6417   0.0631     0        0 0.6417
-     sd_TPR FPR sd_FPR   F1_u sd_F1_u F1_v sd_F1_v     F1  sd_F1    Cor
-[1,] 0.0422   0      0 0.7786  0.0625 0.78  0.0469 0.7809 0.0313 0.8911</code></pre>
-<pre class="r"><code>model4elnets1</code></pre>
-<pre><code>     TPR_u sd_TPR_u  FPR_u sd_FPR_u TPR_v sd_TPR_v  FPR_v sd_FPR_v TPR
-[1,]     1        0 0.0408   0.0476     1        0 0.0417   0.0649   1
+<pre><code>     TPR_u sd_TPR_u FPR_u sd_FPR_u  TPR_v sd_TPR_v  FPR_v sd_FPR_v    TPR
+[1,] 0.622   0.0683  0.01   0.0152 0.6235   0.0592 0.0076   0.0125 0.6228
      sd_TPR    FPR sd_FPR   F1_u sd_F1_u   F1_v sd_F1_v     F1 sd_F1
-[1,]      0 0.0412  0.038 0.9309  0.0753 0.9333  0.0891 0.9278  0.06
+[1,] 0.0491 0.0088 0.0106 0.7476  0.0633 0.7531  0.0553 0.7507 0.046
         Cor
-[1,] 0.8932</code></pre>
+[1,] 0.7948</code></pre>
+<pre class="r"><code>model4elnets1</code></pre>
+<pre><code>     TPR_u sd_TPR_u FPR_u sd_FPR_u TPR_v sd_TPR_v  FPR_v sd_FPR_v    TPR
+[1,]  0.87   0.1425 0.152   0.0848 0.867   0.1712 0.1432   0.0876 0.8685
+     sd_TPR    FPR sd_FPR   F1_u sd_F1_u   F1_v sd_F1_v     F1  sd_F1
+[1,] 0.1124 0.1476 0.0552 0.7079  0.0932 0.7132  0.0956 0.7083 0.0691
+       Cor
+[1,] 0.809</code></pre>
 <pre class="r"><code>model4gsccas1</code></pre>
-<pre><code>      TPR_u sd_TPR_u FPR_u sd_FPR_u TPR_v sd_TPR_v FPR_v sd_FPR_v    TPR
-[1,] 0.8667   0.2249     0        0  0.85    0.233     0        0 0.8583
-     sd_TPR FPR sd_FPR   F1_u sd_F1_u F1_v sd_F1_v     F1  sd_F1    Cor
-[1,]  0.182   0      0 0.9111  0.1499  0.9  0.1554 0.9127 0.1174 0.8653</code></pre>
+<pre><code>     TPR_u sd_TPR_u FPR_u sd_FPR_u TPR_v sd_TPR_v FPR_v sd_FPR_v    TPR
+[1,] 0.975   0.1095 0.063    0.068  0.97   0.1193 0.046   0.0505 0.9725
+     sd_TPR    FPR sd_FPR   F1_u sd_F1_u  F1_v sd_F1_v     F1  sd_F1
+[1,] 0.0863 0.0545 0.0435 0.8827   0.106 0.903  0.1019 0.8908 0.0746
+        Cor
+[1,] 0.7155</code></pre>
 </div>
 <div id="situation-2" class="section level1">
 <h1>Situation 2</h1>
 <pre class="r"><code>#situation 2
-u=c(rep(c(1,-1),10),rep(0,80))
+u=c(rep(c(0.5,-0.5),10),rep(0,80))
 v=u
-model4S0s2=finals(s0cca_simu(30,u,v,50,&#39;normal_mis&#39;,1,sigma_x,sigma_y))
-model4S1s2=finals(s1cca_simu(30,u,v,50,&#39;normal_mis&#39;,1,sigma_x,sigma_y))
-model4elnets2=finals(elnet.cca.simu(30,u,v,50,&#39;normal_mis&#39;,1,sigma_x,sigma_y))
-model4gsccas2=finals(gscca.simu.normal(30,edges,u,v,50,&#39;normal_mis&#39;,1,sigma_x,sigma_y,plain = F))</code></pre>
+model4S0s2=finals(s0cca_simu(100,u,v,50,&#39;normal_mis&#39;,1,sigma_x,sigma_y))
+model4S1s2=finals(s1cca_simu(100,u,v,50,&#39;normal_mis&#39;,1,sigma_x,sigma_y))
+model4elnets2=finals(elnet.cca.simu(100,u,v,50,&#39;normal_mis&#39;,1,sigma_x,sigma_y))
+model4gsccas2=finals(gscca.simu.normal(100,edges,u,v,50,&#39;normal_mis&#39;,1,sigma_x,sigma_y,plain = F))</code></pre>
 <pre class="r"><code>model4S0s2</code></pre>
-<pre><code>     TPR_u sd_TPR_u FPR_u sd_FPR_u  TPR_v sd_TPR_v FPR_v sd_FPR_v    TPR
-[1,] 0.515   0.2093     0        0 0.5233   0.1915     0        0 0.5192
-     sd_TPR FPR sd_FPR   F1_u sd_F1_u   F1_v sd_F1_v     F1 sd_F1    Cor
-[1,] 0.1898   0      0 0.6533  0.2006 0.6648  0.1848 0.6612 0.186 0.9459</code></pre>
-<pre class="r"><code>model4S1s2</code></pre>
-<pre><code>      TPR_u sd_TPR_u FPR_u sd_FPR_u  TPR_v sd_TPR_v FPR_v sd_FPR_v  TPR
-[1,] 0.6533   0.0742     0        0 0.6467   0.0571     0        0 0.65
-     sd_TPR FPR sd_FPR  F1_u sd_F1_u  F1_v sd_F1_v     F1  sd_F1    Cor
-[1,]  0.041   0      0 0.788  0.0525 0.784  0.0425 0.7872 0.0301 0.9682</code></pre>
-<pre class="r"><code>model4elnets2</code></pre>
-<pre><code>     TPR_u sd_TPR_u  FPR_u sd_FPR_u TPR_v sd_TPR_v  FPR_v sd_FPR_v TPR
-[1,]     1        0 0.0762   0.0632     1        0 0.1033   0.0715   1
+<pre><code>     TPR_u sd_TPR_u  FPR_u sd_FPR_u  TPR_v sd_TPR_v  FPR_v sd_FPR_v    TPR
+[1,] 0.385   0.1971 0.0016   0.0058 0.3965   0.2113 0.0014   0.0043 0.3908
      sd_TPR    FPR sd_FPR   F1_u sd_F1_u   F1_v sd_F1_v     F1  sd_F1
-[1,]      0 0.0898 0.0499 0.8767  0.0861 0.8401  0.0998 0.8534 0.0699
+[1,] 0.1947 0.0015 0.0039 0.5247  0.2071 0.5339  0.2162 0.5319 0.2029
         Cor
-[1,] 0.9946</code></pre>
+[1,] 0.8072</code></pre>
+<pre class="r"><code>model4S1s2</code></pre>
+<pre><code>     TPR_u sd_TPR_u  FPR_u sd_FPR_u TPR_v sd_TPR_v  FPR_v sd_FPR_v    TPR
+[1,] 0.631   0.0696 0.0024   0.0092 0.624   0.0672 0.0025   0.0081 0.6275
+     sd_TPR    FPR sd_FPR   F1_u sd_F1_u   F1_v sd_F1_v     F1  sd_F1
+[1,] 0.0525 0.0024 0.0075 0.7676  0.0592 0.7622  0.0567 0.7656 0.0466
+        Cor
+[1,] 0.8716</code></pre>
+<pre class="r"><code>model4elnets2</code></pre>
+<pre><code>      TPR_u sd_TPR_u  FPR_u sd_FPR_u TPR_v sd_TPR_v  FPR_v sd_FPR_v    TPR
+[1,] 0.9745   0.0691 0.1334   0.0871 0.977   0.0601 0.1389   0.0896 0.9758
+     sd_TPR    FPR sd_FPR   F1_u sd_F1_u   F1_v sd_F1_v     F1  sd_F1
+[1,] 0.0569 0.1361 0.0611 0.7897  0.0989 0.7848  0.0996 0.7804 0.0703
+        Cor
+[1,] 0.9494</code></pre>
 <pre class="r"><code>model4gsccas2</code></pre>
-<pre><code>      TPR_u sd_TPR_u FPR_u sd_FPR_u TPR_v sd_TPR_v FPR_v sd_FPR_v    TPR
-[1,] 0.9833   0.0913     0        0     1        0     0        0 0.9917
-     sd_TPR FPR sd_FPR   F1_u sd_F1_u F1_v sd_F1_v     F1  sd_F1    Cor
-[1,] 0.0456   0      0 0.9889  0.0609    1       0 0.9952 0.0261 0.9949</code></pre>
+<pre><code>     TPR_u sd_TPR_u  FPR_u sd_FPR_u TPR_v sd_TPR_v  FPR_v sd_FPR_v   TPR
+[1,]  0.88   0.2428 0.0089   0.0172 0.898   0.2082 0.0116   0.0191 0.889
+     sd_TPR    FPR sd_FPR   F1_u sd_F1_u   F1_v sd_F1_v     F1  sd_F1
+[1,] 0.1869 0.0102 0.0128 0.8962  0.1834 0.9083  0.1499 0.9092 0.1282
+        Cor
+[1,] 0.9195</code></pre>
 <div id="session-information" class="section level2">
 <h2>Session information</h2>
 <!-- Insert the session information into the document -->
