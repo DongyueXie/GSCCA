@@ -1,0 +1,67 @@
+---
+title: "Count data simulation, from normal case"
+author: "Dongyue Xie"
+date: YYYY-MM-DD
+output: html_document
+---
+
+<!-- The file analysis/chunks.R contains chunks that define default settings
+shared across the workflowr files. -->
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+<!-- Update knitr chunk options -->
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+<!-- Insert the date the file was last updated -->
+```{r last-updated, echo=FALSE, results='asis'}
+```
+
+<!-- Insert the code version (Git commit SHA1) if Git repository exists and R
+ package git2r is installed -->
+```{r code-version, echo=FALSE, results='asis'}
+```
+
+<!-- Add your analysis here -->
+Generate count data using a Dirichlet Multinomial model
+```{r,warning=FALSE,message=FALSE}
+library(scca)
+u=c(rep(1,10),rep(-1,10),rep(0,80))
+v=c(rep(c(1,0.2),5),rep(c(-1,-0.2),5),rep(0,80))
+sigma_x=arcov(0.7,100)
+sigma_y=sigma_x
+edges=c(as.numeric(combn(1:10,2)),as.numeric(combn(11:20,2)),21:100)
+
+countnS0=finals(s0cca_simu(100,u,v,50,'count_normal',2,sigma_x,sigma_y))
+countnS1=finals(s1cca_simu(100,u,v,50,'count_normal',2,sigma_x,sigma_y))
+countnelnet=finals(elnet.cca.simu(100,u,v,50,'count_normal',2,sigma_x,sigma_y))
+countngscca=finals(gscca.simu.normal(100,edges,u,v,50,'count_normal',2,sigma_x,sigma_y,gamma.u = 2.12,gamma.v = 2.12))
+```
+
+```{r}
+plot(c((countnS0)[1],(countnS1)[1],(countnelnet)[1],(countngscca)[1]),type = 'b',ylim = c(0,1), xaxt="n",
+     ylab='',xlab='',main = 'Variable selection of x')
+lines(c((countnS0)[3],(countnS1)[3],(countnelnet)[3],(countngscca)[3]),type = 'b',lty=2)
+lines(c((countnS0)[13],(countnS1)[13],(countnelnet)[13],(countngscca)[13]),type = 'b',lty=3)
+legend('topleft',legend=c('TPR','FPR','F1-score'),lty=c(1,2,3))
+v1=c(1,2,3,4)
+v2=c('S0CCA','SCCA','ENSCCA','GSCCA')
+axis(1,v1,v2)
+
+plot(c((countnS0)[5],(countnS1)[5],(countnelnet)[5],(countngscca)[5]),type = 'b',ylim = c(0,1), xaxt="n",
+     ylab='',xlab='',main = 'Variable selection of y')
+lines(c((countnS0)[7],(countnS1)[7],(countnelnet)[7],(countngscca)[7]),type = 'b',lty=2)
+lines(c((countnS0)[15],(countnS1)[15],(countnelnet)[15],(countngscca)[15]),type = 'b',lty=3)
+legend('topleft',legend=c('TPR','FPR','F1-score'),lty=c(1,2,3))
+v1=c(1,2,3,4)
+v2=c('S0CCA','SCCA','ENSCCA','GSCCA')
+axis(1,v1,v2)
+```
+
+## Session information
+
+<!-- Insert the session information into the document -->
+```{r session-info}
+```
