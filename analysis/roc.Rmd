@@ -80,8 +80,10 @@ legend('bottomright',legend = c('S0CCA','SCCA','ENSCCA','GSCCA'),lty = c(1,1,1,1
 Situation 1
 ```{r,warning=FALSE,message=FALSE}
 #u=c(rep(1,10),rep(-1,10),rep(0,80))
-u=c(rep(c(1,0.5),10),rep(0,80))
-v=u
+#u=c(rep(c(1,0.5),10),rep(0,80))
+#v=u
+u=c(rep(c(1,0.2),10),rep(0,80))
+v=c(rep(c(1,1,0.2,0.2,0.2),4),rep(0,80))
 rocs=roc.simu(1,u,v,sigma_x = sigma_x,sigma_y = sigma_y,edges = edges,data.type = "normal_oth")
 
 tt=cbind(rocs$mats0[,2],rocs$mats0[,1])
