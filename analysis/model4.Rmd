@@ -31,28 +31,6 @@ In this simulation, the correlation between ${x}$ and ${y}$ is induced by two or
 ```{r,warning=FALSE,message=FALSE}
 library(scca)
 
-#situation 1
-GenStrucData_Normal=function(u,v,n=50,sigma_z=1,sigma_x=NULL,sigma_y=NULL){
-  p=length(u)
-  q=length(v)
-  if(is.null(sigma_x)){sigma_x=diag(1,p,p)}
-  if(is.null(sigma_y)){sigma_y=diag(1,q,q)}
-  x=c()
-  y=c()
-  u1=u;v1=v
-  u2=0.5*(-u1);v2=0.5*(-v1)
-  for(i in 1:n){
-    zi1=rnorm(1,0,sigma_z)
-    zi2=rnorm(1,0,sigma_z)
-    xi=zi1*u1+zi2*u2+mvrnorm(1,rep(0,p),sigma_x)
-    x=rbind(x,xi)
-    yi=zi1*v1+zi2*v2+mvrnorm(1,rep(0,q),sigma_y)
-    y=rbind(y,yi)
-  }
-  #print (sigma_x, sigma_y, sigma_z)
-  return(list(x=x,y=y))
-}
-
 sigma_x = arcov(0.7,100)
 sigma_y=sigma_x
 
@@ -60,10 +38,10 @@ edges=c(as.numeric(combn(1:10,2)),as.numeric(combn(11:20,2)),21:100)
 
 u=c(rep(1,10),rep(-1,10),rep(0,80))
 v=u
-model4S0s1=finals(s0cca_simu(30,u,v,50,'normal',1,sigma_x,sigma_y))
-model4S1s1=finals(s1cca_simu(30,u,v,50,'normal',1,sigma_x,sigma_y))
-model4elnets1=finals(elnet.cca.simu(30,u,v,50,'normal',1,sigma_x,sigma_y))
-model4gsccas1=finals(gscca.simu.normal(30,edges,u,v,50,'normal',1,sigma_x,sigma_y))
+model4S0s1=finals(s0cca_simu(30,u,v,50,'normal_oth',1,sigma_x,sigma_y))
+model4S1s1=finals(s1cca_simu(30,u,v,50,'normal_oth',1,sigma_x,sigma_y))
+model4elnets1=finals(elnet.cca.simu(30,u,v,50,'normal_oth',1,sigma_x,sigma_y))
+model4gsccas1=finals(gscca.simu.normal(30,edges,u,v,50,'normal_oth',1,sigma_x,sigma_y))
 ```
 
 ```{r}
@@ -76,33 +54,12 @@ model4gsccas1
 # Situation 2
 ```{r,warning=FALSE,message=FALSE}
 #situation 2
-GenStrucData_Normal=function(u,v,n=50,sigma_z=1,sigma_x=NULL,sigma_y=NULL){
-  p=length(u)
-  q=length(v)
-  if(is.null(sigma_x)){sigma_x=diag(1,p,p)}
-  if(is.null(sigma_y)){sigma_y=diag(1,q,q)}
-  x=c()
-  y=c()
-  u1=u;v1=v
-  u2=-u1;v2=-v1
-  for(i in 1:n){
-    zi1=rnorm(1,0,sigma_z)
-    zi2=rnorm(1,0,sigma_z)
-    xi=zi1*u1+zi2*u2+mvrnorm(1,rep(0,p),sigma_x)
-    x=rbind(x,xi)
-    yi=zi1*v1+zi2*v2+mvrnorm(1,rep(0,q),sigma_y)
-    y=rbind(y,yi)
-  }
-  #print (sigma_x, sigma_y, sigma_z)
-  return(list(x=x,y=y))
-}
-
 u=c(rep(c(1,-1),10),rep(0,80))
 v=u
-model4S0s2=finals(s0cca_simu(30,u,v,50,'normal',1,sigma_x,sigma_y))
-model4S1s2=finals(s1cca_simu(30,u,v,50,'normal',1,sigma_x,sigma_y))
-model4elnets2=finals(elnet.cca.simu(30,u,v,50,'normal',1,sigma_x,sigma_y))
-model4gsccas2=finals(gscca.simu.normal(30,edges,u,v,50,'normal',1,sigma_x,sigma_y,plain = F))
+model4S0s2=finals(s0cca_simu(30,u,v,50,'normal_mis',1,sigma_x,sigma_y))
+model4S1s2=finals(s1cca_simu(30,u,v,50,'normal_mis',1,sigma_x,sigma_y))
+model4elnets2=finals(elnet.cca.simu(30,u,v,50,'normal_mis',1,sigma_x,sigma_y))
+model4gsccas2=finals(gscca.simu.normal(30,edges,u,v,50,'normal_mis',1,sigma_x,sigma_y,plain = F))
 ```
 
 ```{r}
