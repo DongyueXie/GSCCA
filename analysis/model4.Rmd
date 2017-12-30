@@ -37,12 +37,12 @@ sigma_y=sigma_x
 edges=c(as.numeric(combn(1:10,2)),as.numeric(combn(11:20,2)),21:100)
 
 #u=c(rep(1,10),rep(-1,10),rep(0,80))
-u=c(rep(c(1,0.5),10),rep(0,80))
-v=u
+u=c(rep(c(1,0.2),10),rep(0,80))
+v=c(rep(c(1,1,0.2,0.2,0.2),4),rep(0,80))
 model4S0s1=finals(s0cca_simu(100,u,v,50,'normal_oth',1,sigma_x,sigma_y))
 model4S1s1=finals(s1cca_simu(100,u,v,50,'normal_oth',1,sigma_x,sigma_y))
 model4elnets1=finals(elnet.cca.simu(100,u,v,50,'normal_oth',1,sigma_x,sigma_y))
-model4gsccas1=finals(gscca.simu.normal(100,edges,u,v,50,'normal_oth',1,sigma_x,sigma_y))
+model4gsccas1=finals(gscca.simu.normal(100,edges,u,v,50,'normal_oth',1,sigma_x,sigma_y,gamma.u = 2.12,gamma.v = 2.12))
 ```
 
 ```{r}
