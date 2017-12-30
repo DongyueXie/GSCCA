@@ -27,6 +27,7 @@ knitr::read_chunk("chunks.R")
 <!-- Add your analysis here -->
 
 Model 6 examines the effect of sample size.
+
 ```{r,warning=FALSE,message=FALSE}
 library(scca)
 u=c(rep(1,10),rep(-1,10),rep(0,80))
@@ -41,11 +42,11 @@ model6S1=c()
 model6elnet=c()
 model6gscca=c()
 for(n in 1:length(nlist)){
-  print(n)
-  model6S0=rbind(model6S0,finals(s0cca_simu(1,u,v,nlist[n],'normal',1,sigma_x,sigma_y)))
-  model6S1=rbind(model6S1,finals(s1cca_simu(1,u,v,nlist[n],'normal',1,sigma_x,sigma_y)))
-  model6elnet=rbind(model6elnet,finals(elnet.cca.simu(1,u,v,nlist[n],'normal',1,sigma_x,sigma_y)))
-  model6gscca=rbind(model6gscca,finals(gscca.simu.normal(1,edges,u,v,nlist[n],'normal',1,sigma_x,sigma_y)))
+  #print(n)
+  model6S0=rbind(model6S0,finals(s0cca_simu(100,u,v,nlist[n],'normal',1,sigma_x,sigma_y)))
+  model6S1=rbind(model6S1,finals(s1cca_simu(100,u,v,nlist[n],'normal',1,sigma_x,sigma_y)))
+  model6elnet=rbind(model6elnet,finals(elnet.cca.simu(100,u,v,nlist[n],'normal',1,sigma_x,sigma_y)))
+  model6gscca=rbind(model6gscca,finals(gscca.simu.normal(100,edges,u,v,nlist[n],'normal',1,sigma_x,sigma_y)))
 }
 
 ```
@@ -93,6 +94,7 @@ lines(nlist,model6elnet[,17],type = 'b',lty=3)
 lines(nlist,model6gscca[,17],type = 'b',lty=4)
 legend('bottomright',legend = c('S0CCA','SCCA','ENSCCA','GSCCA'),lty=c(1,2,3,4))
 ```
+
 ## Session information
 
 <!-- Insert the session information into the document -->
