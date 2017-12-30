@@ -323,7 +323,7 @@ shared across the workflowr files. -->
 <p><strong>Last updated:</strong> 2017-12-30</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> 6c5ef11</p>
+<p><strong>Code version:</strong> c131f6a</p>
 <!-- Add your analysis here -->
 <div id="normal-latent-variable-model" class="section level1">
 <h1>Normal Latent variable model</h1>
@@ -376,8 +376,10 @@ legend(&#39;bottomright&#39;,legend = c(&#39;S0CCA&#39;,&#39;SCCA&#39;,&#39;ENSC
 <h2>Model 4</h2>
 <p>Situation 1</p>
 <pre class="r"><code>#u=c(rep(1,10),rep(-1,10),rep(0,80))
-u=c(rep(c(1,0.5),10),rep(0,80))
-v=u
+#u=c(rep(c(1,0.5),10),rep(0,80))
+#v=u
+u=c(rep(c(1,0.2),10),rep(0,80))
+v=c(rep(c(1,1,0.2,0.2,0.2),4),rep(0,80))
 rocs=roc.simu(1,u,v,sigma_x = sigma_x,sigma_y = sigma_y,edges = edges,data.type = &quot;normal_oth&quot;)
 
 tt=cbind(rocs$mats0[,2],rocs$mats0[,1])
