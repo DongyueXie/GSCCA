@@ -1,0 +1,67 @@
+---
+title: "Count data simulation, latent variable model"
+author: "Dongyue Xie"
+date: YYYY-MM-DD
+output: html_document
+---
+
+<!-- The file analysis/chunks.R contains chunks that define default settings
+shared across the workflowr files. -->
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+<!-- Update knitr chunk options -->
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+<!-- Insert the date the file was last updated -->
+```{r last-updated, echo=FALSE, results='asis'}
+```
+
+<!-- Insert the code version (Git commit SHA1) if Git repository exists and R
+ package git2r is installed -->
+```{r code-version, echo=FALSE, results='asis'}
+```
+
+<!-- Add your analysis here -->
+
+Generate count data using a Dirichlet Multinomial model
+
+```{r,warning=FALSE,message=FALSE}
+library(scca)
+u=c(rep(1,10),rep(-1,10),rep(0,80))
+v=c(rep(c(1,0.2),5),rep(c(-1,-0.2),5),rep(0,80))
+sigma_x=arcov(0.7,100)
+sigma_y=sigma_x
+edges=c(as.numeric(combn(1:10,2)),as.numeric(combn(11:20,2)),21:100)
+countlS0=finals(s0cca_simu(100,u,v,50,'count_latent',2,sigma_x,sigma_y))
+countlS1=finals(s1cca_simu(100,u,v,50,'count_latent',2,sigma_x,sigma_y))
+countlelnet=finals(elnet.cca.simu(100,u,v,50,'count_latent',2,sigma_x,sigma_y))
+countlgscca=finals(gscca.simu.normal(100,edges,u,v,50,'count_latent',2,sigma_x,sigma_y,gamma.u = c(1.3),gamma.v = c(1.3)))
+```
+
+```{r}
+plot(c((countlS0)[1],(countlS1)[1],(countlelnet)[1],(countlgscca)[1]),type = 'b',ylim = c(0,1), xaxt="n",
+     ylab='',xlab='',main = 'Variable selection of x')
+lines(c((countlS0)[3],(countlS1)[3],(countlelnet)[3],(countlgscca)[3]),type = 'b',lty=2)
+lines(c((countlS0)[13],(countlS1)[13],(countlelnet)[13],(countlgscca)[13]),type = 'b',lty=3)
+legend('topleft',legend=c('TPR','FPR','F1-score'),lty=c(1,2,3))
+v1=c(1,2,3,4)
+v2=c('S0CCA','SCCA','ENSCCA','GSCCA')
+axis(1,v1,v2)
+
+plot(c((countlS0)[5],(countlS1)[5],(countlelnet)[5],(countlgscca)[5]),type = 'b',ylim = c(0,1), xaxt="n",
+     ylab='',xlab='',main = 'Variable selection of y')
+lines(c((countlS0)[7],(countlS1)[7],(countlelnet)[7],(countlgscca)[7]),type = 'b',lty=2)
+lines(c((countlS0)[15],(countlS1)[15],(countlelnet)[15],(countlgscca)[15]),type = 'b',lty=3)
+legend('topleft',legend=c('TPR','FPR','F1-score'),lty=c(1,2,3))
+v1=c(1,2,3,4)
+v2=c('S0CCA','SCCA','ENSCCA','GSCCA')
+axis(1,v1,v2)
+```
+## Session information
+
+<!-- Insert the session information into the document -->
+```{r session-info}
+```
