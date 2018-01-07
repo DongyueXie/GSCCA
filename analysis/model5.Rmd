@@ -47,7 +47,7 @@ for(d in 1:length(dlist)){
   model5S0=rbind(model5S0,finals(s0cca_simu(30,ud,vd,50,'normal',1,sigma_x,sigma_y)))
   model5S1=rbind(model5S1,finals(s1cca_simu(30,ud,vd,50,'normal',1,sigma_x,sigma_y)))
   model5elnet=rbind(model5elnet,finals(elnet.cca.simu(30,ud,vd,50,'normal',1,sigma_x,sigma_y)))
-  model5gscca=rbind(model5gscca,finals(gscca.simu.normal(30,edges,ud,vd,50,'normal',1,sigma_x,sigma_y,gamma.u = 2.1213,gamma.v = 2.1213)))
+  model5gscca=rbind(model5gscca,finals(gscca.simu.normal(30,edges,edges,ud,vd,50,'normal',1,sigma_x,sigma_y,gamma.u = 2.1213,gamma.v = 2.1213)))
 }
 
 ```
