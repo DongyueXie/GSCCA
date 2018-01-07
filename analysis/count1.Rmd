@@ -37,7 +37,7 @@ edges=c(as.numeric(combn(1:10,2)),as.numeric(combn(11:20,2)),21:100)
 countnS0=finals(s0cca_simu(100,u,v,50,'count_normal',2,sigma_x,sigma_y))
 countnS1=finals(s1cca_simu(100,u,v,50,'count_normal',2,sigma_x,sigma_y))
 countnelnet=finals(elnet.cca.simu(100,u,v,50,'count_normal',2,sigma_x,sigma_y))
-countngscca=finals(gscca.simu.normal(100,edges,u,v,50,'count_normal',2,sigma_x,sigma_y,gamma.u = 2.12,gamma.v = 2.12))
+countngscca=finals(gscca.simu.normal(100,edges,edges,u,v,50,'count_normal',2,sigma_x,sigma_y,gamma.u = 2.12,gamma.v = 2.12))
 ```
 
 ```{r}
