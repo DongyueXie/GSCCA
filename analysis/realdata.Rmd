@@ -1,0 +1,125 @@
+---
+title: "Real Data Analysis"
+author: "Dongyue Xie"
+date: YYYY-MM-DD
+output: html_document
+---
+
+<!-- The file analysis/chunks.R contains chunks that define default settings
+shared across the workflowr files. -->
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+<!-- Update knitr chunk options -->
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+<!-- Insert the date the file was last updated -->
+```{r last-updated, echo=FALSE, results='asis'}
+```
+
+<!-- Insert the code version (Git commit SHA1) if Git repository exists and R
+ package git2r is installed -->
+```{r code-version, echo=FALSE, results='asis'}
+```
+
+<!-- Add your analysis here -->
+American Gut project is 
+
+```{r,message=FALSE,warning=FALSE}
+library(scca)
+library(ape)
+library(corrplot)
+#study the fecal and skin
+#generate structural matrix
+dim(fecal_skin$X)
+Sx=GenStrucMat(fecal_skin$X,fecal_skin$Tree_S1,wcorr=T,h=0.3)
+Sy=GenStrucMat(fecal_skin$Y,fecal_skin$Tree_S2,wcorr=T,h=0.3)
+dim(Sx)
+dim(Sy)
+mod_fecal_skin=gscca.bic(fecal_skin$X,fecal_skin$Y,gamma.u=c(0.5,1.5,2.5),gamma.v=c(1.5,2,3),Sx=Sx,Sy=Sy)
+#plot the three, label the correlated ones
+i_x=which(mod_fecal_skin$u!=0)
+i_y=which(mod_fecal_skin$v!=0)
+plot(fecal_skin$Tree_S1,show.tip.label = F,use.edge.length = F,edge.color = 4,main='Fecal')
+tiplabels(tip=i_x,pch=21,bg='red')
+plot(fecal_skin$Tree_S2,show.tip.label = F,use.edge.length = F,edge.color = 4,direction = 'leftwards',main='Skin')
+tiplabels(tip=i_y,pch=21,bg='red')
+#find the name
+TaxaRank = c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species")
+colnames(fecal_skin$Taxa_S1)=TaxaRank
+colnames(fecal_skin$Taxa_S2)=TaxaRank
+name_fecal=fecal_skin$Taxa_S1[match(colnames(fecal_skin$X)[i_x],rownames(fecal_skin$Taxa_S1)),]
+name_skin=fecal_skin$Taxa_S2[match(colnames(fecal_skin$Y)[i_y],rownames(fecal_skin$Taxa_S2)),]
+#write.table(name_fecal,file='fecal_skin_fecal.csv')
+#write.table(name_skin,file='fecal_skin_skin.csv')
+name_fecal
+name_skin
+#heat map of selected variables
+corrplot(cor(fecal_skin$X[,i_x],fecal_skin$Y[,i_y]),main='Correlation matrix of selected taxa')
+```
+
+```{r}
+#oral and skin
+dim(oral_skin$X)
+Sx=GenStrucMat(oral_skin$X,oral_skin$Tree_S1,wcorr=T,h=0.3)
+Sy=GenStrucMat(oral_skin$Y,oral_skin$Tree_S2,wcorr=T,h=0.3)
+dim(Sx)
+dim(Sy)
+#2.0, 1.8
+mod_oral_skin=gscca.bic(oral_skin$X,oral_skin$Y,gamma.u=c(1.7,1.8,1.9,2,2.5),gamma.v=c(1,1.6,1.8,2,2.5),Sx=Sx,Sy=Sy)
+#plot the three, label the correlated ones
+i_x=which(mod_oral_skin$u!=0)
+i_y=which(mod_oral_skin$v!=0)
+plot(oral_skin$Tree_S1,show.tip.label = F,use.edge.length = F,edge.color = 4,main='Oral')
+tiplabels(tip=i_x,pch=21,bg='red')
+plot(oral_skin$Tree_S2,show.tip.label = F,use.edge.length = F,edge.color = 4,direction = 'leftwards',main='Skin')
+tiplabels(tip=i_y,pch=21,bg='red')
+#find the name
+TaxaRank = c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species")
+colnames(oral_skin$Taxa_S1)=TaxaRank
+colnames(oral_skin$Taxa_S2)=TaxaRank
+name_oral=oral_skin$Taxa_S1[match(colnames(oral_skin$X)[i_x],rownames(oral_skin$Taxa_S1)),]
+name_skin=oral_skin$Taxa_S2[match(colnames(oral_skin$Y)[i_y],rownames(oral_skin$Taxa_S2)),]
+#write.table(name_oral,file='oral_skin_oral.csv')
+#write.table(name_skin,file='oral_skin_skin.csv')
+name_oral
+name_skin
+corrplot(cor(oral_skin$X[,i_x],oral_skin$Y[,i_y]),main='Correlation matrix of selected taxa')
+```
+
+
+
+
+```{r,include=FALSE,eval=FALSE}
+#fecal_skin
+
+tree1=fecal_skin$Tree_S1
+tree2=fecal_skin$Tree_S2
+tree1$tip.label=1:100
+tree2$tip.label=1:100
+library(ape)
+plot(tree1,use.edge.length = F,label.offset = 0.5)
+plot(tree2,use.edge.length = F,label.offset = 0.5)
+##
+Make_edge=function(tip){
+  eg=c()
+  for(i in 1:nrow(tip)){
+    eg=c(eg,as.numeric(combn(tip[i,1]:tip[i,2],2)))
+  }
+  return(eg)
+}
+##
+#node has maximum 4 tips
+tip1=rbind(c(1,3),c(4,7),c(9,12),c(14,15),c(18,21),c(23,25),c(26,27),c(30,32),c(36,38),c(39,42),c(43,44),c(45,47),c(48,49),c(51,54),c(55,58),c(59,62),c(63,64),c(65,66),c(67,68),c(69,71),c(73,75),c(77,80),c(81,84),c(87,90),c(91,94),c(95,98),c(99,100))
+edge1=Make_edge(tip1)
+tip2=rbind(c(1,4),c(7,10),c(13,16),c(18,21),c(23,26),c(27,28),c(29,31),c(32,34),c(36,37),c(38,40),c(41,43),c(44,46),c(47,50),c(53,56),c(57,58),c(59,60),c(61,62),c(64,67),c(68,69),c(71,74),c(75,76),c(77,78),c(79,82),c(86,89),c(91,92),c(93,96),c(98,100))
+edge2=Make_edge(tip2)
+mod_fecal_skin=gscca.bic(fecal_skin$X,fecal_skin$Y,edge1,edge2,20,gamma.u=2,gamma.v=2)
+```
+## Session information
+
+<!-- Insert the session information into the document -->
+```{r session-info}
+```
