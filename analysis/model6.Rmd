@@ -46,7 +46,7 @@ for(n in 1:length(nlist)){
   model6S0=rbind(model6S0,finals(s0cca_simu(100,u,v,nlist[n],'normal',1,sigma_x,sigma_y)))
   model6S1=rbind(model6S1,finals(s1cca_simu(100,u,v,nlist[n],'normal',1,sigma_x,sigma_y)))
   model6elnet=rbind(model6elnet,finals(elnet.cca.simu(100,u,v,nlist[n],'normal',1,sigma_x,sigma_y)))
-  model6gscca=rbind(model6gscca,finals(gscca.simu.normal(100,edges,u,v,nlist[n],'normal',1,sigma_x,sigma_y)))
+  model6gscca=rbind(model6gscca,finals(gscca.simu.normal(100,edges,edges,u,v,nlist[n],'normal',1,sigma_x,sigma_y)))
 }
 
 ```
