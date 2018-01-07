@@ -43,10 +43,10 @@ plot(v)
 sigma_x=arcov(0.7,100)
 sigma_y=sigma_x
 edges=c(as.numeric(combn(1:10,2)),as.numeric(combn(11:20,2)),21:100)
-model1S0=s0cca_simu(12,u,v,50,'normal',1,sigma_x,sigma_y)
-model1S1=s1cca_simu(12,u,v,50,'normal',1,sigma_x,sigma_y)
-model1elnet=elnet.cca.simu(12,u,v,50,'normal',1,sigma_x,sigma_y)
-model1gscca=gscca.simu.normal(12,edges,u,v,50,'normal',1,sigma_x,sigma_y)
+model1S0=s0cca_simu(100,u,v,50,'normal',1,sigma_x,sigma_y)
+model1S1=s1cca_simu(100,u,v,50,'normal',1,sigma_x,sigma_y)
+model1elnet=elnet.cca.simu(100,u,v,50,'normal',1,sigma_x,sigma_y)
+model1gscca=gscca.simu.normal(100,edges,edges,u,v,50,'normal',1,sigma_x,sigma_y)
 ```
 
 Plot the results: Variable selection performance for x and y
