@@ -45,10 +45,10 @@ model2S1=c()
 model2elnet=c()
 model2gscca=c()
 for(sz in 1:length(szlist)){
-  model2S0=rbind(model2S0,finals(s0cca_simu(1,u,v,50,'normal',szlist[sz],sigma_x,sigma_y)))
-  model2S1=rbind(model2S1,finals(s1cca_simu(1,u,v,50,'normal',szlist[sz],sigma_x,sigma_y)))
-  model2elnet=rbind(model2elnet,finals(elnet.cca.simu(1,u,v,50,'normal',szlist[sz],sigma_x,sigma_y)))
-  model2gscca=rbind(model2gscca,finals(gscca.simu.normal(1,edges,u,v,50,'normal',szlist[sz],sigma_x,sigma_y,gamma.u = 2.12,gamma.v = 2.12)))
+  model2S0=rbind(model2S0,finals(s0cca_simu(100,u,v,50,'normal',szlist[sz],sigma_x,sigma_y)))
+  model2S1=rbind(model2S1,finals(s1cca_simu(100,u,v,50,'normal',szlist[sz],sigma_x,sigma_y)))
+  model2elnet=rbind(model2elnet,finals(elnet.cca.simu(100,u,v,50,'normal',szlist[sz],sigma_x,sigma_y)))
+  model2gscca=rbind(model2gscca,finals(gscca.simu.normal(100,edges,edges,u,v,50,'normal',szlist[sz],sigma_x,sigma_y,gamma.u = 2.12,gamma.v = 2.12)))
 }
 ```
 
