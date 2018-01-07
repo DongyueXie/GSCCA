@@ -319,10 +319,10 @@ div.section {
 shared across the workflowr files. -->
 <!-- Update knitr chunk options -->
 <!-- Insert the date the file was last updated -->
-<p><strong>Last updated:</strong> 2017-12-29</p>
+<p><strong>Last updated:</strong> 2018-01-07</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> a087ffc</p>
+<p><strong>Code version:</strong> d82725d</p>
 <!-- Add your analysis here -->
 <p>Model 2 examines the effect of correlation strength.</p>
 <pre class="r"><code>library(scca)
@@ -337,10 +337,10 @@ model2S1=c()
 model2elnet=c()
 model2gscca=c()
 for(sz in 1:length(szlist)){
-  model2S0=rbind(model2S0,finals(s0cca_simu(1,u,v,50,&#39;normal&#39;,szlist[sz],sigma_x,sigma_y)))
-  model2S1=rbind(model2S1,finals(s1cca_simu(1,u,v,50,&#39;normal&#39;,szlist[sz],sigma_x,sigma_y)))
-  model2elnet=rbind(model2elnet,finals(elnet.cca.simu(1,u,v,50,&#39;normal&#39;,szlist[sz],sigma_x,sigma_y)))
-  model2gscca=rbind(model2gscca,finals(gscca.simu.normal(1,edges,u,v,50,&#39;normal&#39;,szlist[sz],sigma_x,sigma_y,gamma.u = 2.12,gamma.v = 2.12)))
+  model2S0=rbind(model2S0,finals(s0cca_simu(100,u,v,50,&#39;normal&#39;,szlist[sz],sigma_x,sigma_y)))
+  model2S1=rbind(model2S1,finals(s1cca_simu(100,u,v,50,&#39;normal&#39;,szlist[sz],sigma_x,sigma_y)))
+  model2elnet=rbind(model2elnet,finals(elnet.cca.simu(100,u,v,50,&#39;normal&#39;,szlist[sz],sigma_x,sigma_y)))
+  model2gscca=rbind(model2gscca,finals(gscca.simu.normal(100,edges,edges,u,v,50,&#39;normal&#39;,szlist[sz],sigma_x,sigma_y,gamma.u = 2.12,gamma.v = 2.12)))
 }</code></pre>
 <p>TPR and FPR when selecting x</p>
 <pre class="r"><code>plot(szlist,model2S0[,1],xlab=expression(sigma[z]),ylab = &#39;&#39;,main = &#39;TPR and FPR for selecting X&#39;,type = &#39;b&#39;,ylim = c(0,1), xaxt=&quot;n&quot;)
@@ -403,16 +403,29 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] scca_0.1.0       dirmult_0.1.3-4  matrixcalc_1.0-3 glmnet_2.0-13   
- [5] foreach_1.4.3    genlasso_1.3     igraph_1.1.2     Matrix_1.2-9    
- [9] MASS_7.3-47      PMA_1.0.9        impute_1.50.1    plyr_1.8.4      
+ [1] scca_0.1.0      phyloseq_1.20.0 dirmult_0.1.3-4 glmnet_2.0-13  
+ [5] foreach_1.4.3   genlasso_1.3    igraph_1.1.2    Matrix_1.2-9   
+ [9] MASS_7.3-47     PMA_1.0.9       impute_1.50.1   plyr_1.8.4     
 
 loaded via a namespace (and not attached):
- [1] Rcpp_0.12.14     knitr_1.15.1     magrittr_1.5     lattice_0.20-35 
- [5] stringr_1.2.0    tools_3.4.0      grid_3.4.0       git2r_0.20.0    
- [9] htmltools_0.3.5  iterators_1.0.8  yaml_2.1.16      rprojroot_1.3-1 
-[13] digest_0.6.13    codetools_0.2-15 evaluate_0.10    rmarkdown_1.8   
-[17] stringi_1.1.6    compiler_3.4.0   backports_1.0.5  pkgconfig_2.0.1 </code></pre>
+ [1] reshape2_1.4.2      splines_3.4.0       lattice_0.20-35    
+ [4] rhdf5_2.20.0        colorspace_1.3-2    htmltools_0.3.5    
+ [7] stats4_3.4.0        yaml_2.1.16         mgcv_1.8-17        
+[10] survival_2.41-3     rlang_0.1.2         BiocGenerics_0.22.0
+[13] stringr_1.2.0       zlibbioc_1.21.0     Biostrings_2.43.8  
+[16] munsell_0.4.3       gtable_0.2.0        codetools_0.2-15   
+[19] evaluate_0.10       Biobase_2.35.1      knitr_1.15.1       
+[22] permute_0.9-4       IRanges_2.9.19      biomformat_1.4.0   
+[25] parallel_3.4.0      Rcpp_0.12.14        backports_1.0.5    
+[28] scales_0.4.1        vegan_2.4-4         S4Vectors_0.13.17  
+[31] jsonlite_1.4        XVector_0.15.2      ggplot2_2.2.1      
+[34] digest_0.6.13       stringi_1.1.6       grid_3.4.0         
+[37] ade4_1.7-6          rprojroot_1.3-1     tools_3.4.0        
+[40] magrittr_1.5        lazyeval_0.2.0      tibble_1.3.3       
+[43] cluster_2.0.6       ape_5.0             pkgconfig_2.0.1    
+[46] data.table_1.10.4   rmarkdown_1.8       iterators_1.0.8    
+[49] multtest_2.32.0     nlme_3.1-131        git2r_0.20.0       
+[52] compiler_3.4.0     </code></pre>
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
 TeX fonts only; see
