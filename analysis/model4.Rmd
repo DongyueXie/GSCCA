@@ -42,7 +42,7 @@ v=c(rep(c(1,1,0.2,0.2,0.2),4),rep(0,80))
 model4S0s1=finals(s0cca_simu(100,u,v,50,'normal_oth',1,sigma_x,sigma_y))
 model4S1s1=finals(s1cca_simu(100,u,v,50,'normal_oth',1,sigma_x,sigma_y))
 model4elnets1=finals(elnet.cca.simu(100,u,v,50,'normal_oth',1,sigma_x,sigma_y))
-model4gsccas1=finals(gscca.simu.normal(100,edges,u,v,50,'normal_oth',1,sigma_x,sigma_y,gamma.u = 2.12,gamma.v = 2.12))
+model4gsccas1=finals(gscca.simu.normal(100,edges,edges,u,v,50,'normal_oth',1,sigma_x,sigma_y,gamma.u = 2.12,gamma.v = 2.12))
 ```
 
 ```{r}
@@ -60,7 +60,7 @@ v=u
 model4S0s2=finals(s0cca_simu(100,u,v,50,'normal_mis',1,sigma_x,sigma_y))
 model4S1s2=finals(s1cca_simu(100,u,v,50,'normal_mis',1,sigma_x,sigma_y))
 model4elnets2=finals(elnet.cca.simu(100,u,v,50,'normal_mis',1,sigma_x,sigma_y))
-model4gsccas2=finals(gscca.simu.normal(100,edges,u,v,50,'normal_mis',1,sigma_x,sigma_y,plain = F))
+model4gsccas2=finals(gscca.simu.normal(100,edges,edges,u,v,50,'normal_mis',1,sigma_x,sigma_y,plain = F))
 ```
 
 ```{r}
