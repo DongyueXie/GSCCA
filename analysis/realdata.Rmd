@@ -60,7 +60,7 @@ name_skin
 corrplot(cor(fecal_skin$X[,i_x],fecal_skin$Y[,i_y]),main='Correlation matrix of selected taxa')
 ```
 
-```{r}
+```{r,message=FALSE,warning=FALSE}
 #oral and skin
 dim(oral_skin$X)
 Sx=GenStrucMat(oral_skin$X,oral_skin$Tree_S1,wcorr=T,h=0.3)
