@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Dongyue Xie" />
+
+
+<title>Real Data Analysis</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">GSCCA</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/jdblischak/workflowr">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Real Data Analysis</h1>
+<h4 class="author"><em>Dongyue Xie</em></h4>
+<h4 class="date"><em>YYYY-MM-DD</em></h4>
+
+</div>
+
+
+<!-- The file analysis/chunks.R contains chunks that define default settings
+shared across the workflowr files. -->
+<!-- Update knitr chunk options -->
+<!-- Insert the date the file was last updated -->
+<p><strong>Last updated:</strong> 2018-01-07</p>
+<!-- Insert the code version (Git commit SHA1) if Git repository exists and R
+ package git2r is installed -->
+<p><strong>Code version:</strong> 19a64e4</p>
+<!-- Add your analysis here -->
+<p>American Gut project is</p>
+<pre class="r"><code>library(scca)
+library(ape)
+library(corrplot)
+#study the fecal and skin
+#generate structural matrix
+dim(fecal_skin$X)</code></pre>
+<pre><code>[1] 479 100</code></pre>
+<pre class="r"><code>Sx=GenStrucMat(fecal_skin$X,fecal_skin$Tree_S1,wcorr=T,h=0.3)
+Sy=GenStrucMat(fecal_skin$Y,fecal_skin$Tree_S2,wcorr=T,h=0.3)
+dim(Sx)</code></pre>
+<pre><code>[1]  67 100</code></pre>
+<pre class="r"><code>dim(Sy)</code></pre>
+<pre><code>[1]  41 100</code></pre>
+<pre class="r"><code>mod_fecal_skin=gscca.bic(fecal_skin$X,fecal_skin$Y,gamma.u=c(0.5,1.5,2.5),gamma.v=c(1.5,2,3),Sx=Sx,Sy=Sy)
+#plot the three, label the correlated ones
+i_x=which(mod_fecal_skin$u!=0)
+i_y=which(mod_fecal_skin$v!=0)
+plot(fecal_skin$Tree_S1,show.tip.label = F,use.edge.length = F,edge.color = 4,main=&#39;Fecal&#39;)
+tiplabels(tip=i_x,pch=21,bg=&#39;red&#39;)</code></pre>
+<p><img src="figure/realdata.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot(fecal_skin$Tree_S2,show.tip.label = F,use.edge.length = F,edge.color = 4,direction = &#39;leftwards&#39;,main=&#39;Skin&#39;)
+tiplabels(tip=i_y,pch=21,bg=&#39;red&#39;)</code></pre>
+<p><img src="figure/realdata.Rmd/unnamed-chunk-1-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#find the name
+TaxaRank = c(&quot;Kingdom&quot;, &quot;Phylum&quot;, &quot;Class&quot;, &quot;Order&quot;, &quot;Family&quot;, &quot;Genus&quot;, &quot;Species&quot;)
+colnames(fecal_skin$Taxa_S1)=TaxaRank
+colnames(fecal_skin$Taxa_S2)=TaxaRank
+name_fecal=fecal_skin$Taxa_S1[match(colnames(fecal_skin$X)[i_x],rownames(fecal_skin$Taxa_S1)),]
+name_skin=fecal_skin$Taxa_S2[match(colnames(fecal_skin$Y)[i_y],rownames(fecal_skin$Taxa_S2)),]
+#write.table(name_fecal,file=&#39;fecal_skin_fecal.csv&#39;)
+#write.table(name_skin,file=&#39;fecal_skin_skin.csv&#39;)
+name_fecal</code></pre>
+<pre><code>        Kingdom    Phylum           Class            Order            
+1000986 &quot;Bacteria&quot; &quot;Actinobacteria&quot; &quot;Actinobacteria&quot; &quot;Actinomycetales&quot;
+4446058 &quot;Bacteria&quot; &quot;Firmicutes&quot;     &quot;Bacilli&quot;        &quot;Bacillales&quot;     
+4479989 &quot;Bacteria&quot; &quot;Firmicutes&quot;     &quot;Bacilli&quot;        &quot;Lactobacillales&quot;
+        Family               Genus             Species 
+1000986 &quot;Corynebacteriaceae&quot; &quot;Corynebacterium&quot; &quot;&quot;      
+4446058 &quot;Staphylococcaceae&quot;  &quot;Staphylococcus&quot;  &quot;aureus&quot;
+4479989 &quot;Streptococcaceae&quot;   &quot;Streptococcus&quot;   &quot;&quot;      </code></pre>
+<pre class="r"><code>name_skin</code></pre>
+<pre><code>        Kingdom    Phylum           Class                
+4431803 &quot;Bacteria&quot; &quot;Cyanobacteria&quot;  &quot;Chloroplast&quot;        
+4420570 &quot;Bacteria&quot; &quot;Cyanobacteria&quot;  &quot;Chloroplast&quot;        
+2806353 &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Gammaproteobacteria&quot;
+4419276 &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Gammaproteobacteria&quot;
+4449851 &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Gammaproteobacteria&quot;
+4360511 &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Gammaproteobacteria&quot;
+4450795 &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Gammaproteobacteria&quot;
+806487  &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Gammaproteobacteria&quot;
+3746876 &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Alphaproteobacteria&quot;
+4453316 &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Alphaproteobacteria&quot;
+1722623 &quot;Bacteria&quot; &quot;Firmicutes&quot;     &quot;Bacilli&quot;            
+        Order               Family               Genus             
+4431803 &quot;Streptophyta&quot;      &quot;&quot;                   &quot;&quot;                
+4420570 &quot;Streptophyta&quot;      &quot;&quot;                   &quot;&quot;                
+2806353 &quot;Xanthomonadales&quot;   &quot;Xanthomonadaceae&quot;   &quot;Stenotrophomonas&quot;
+4419276 &quot;Pseudomonadales&quot;   &quot;Pseudomonadaceae&quot;   &quot;Pseudomonas&quot;     
+4449851 &quot;Enterobacteriales&quot; &quot;Enterobacteriaceae&quot; &quot;&quot;                
+4360511 &quot;Enterobacteriales&quot; &quot;Enterobacteriaceae&quot; &quot;Serratia&quot;        
+4450795 &quot;Pseudomonadales&quot;   &quot;Moraxellaceae&quot;      &quot;Acinetobacter&quot;   
+806487  &quot;Pseudomonadales&quot;   &quot;Moraxellaceae&quot;      &quot;Acinetobacter&quot;   
+3746876 &quot;Rickettsiales&quot;     &quot;mitochondria&quot;       &quot;Carludovica&quot;     
+4453316 &quot;Rickettsiales&quot;     &quot;mitochondria&quot;       &quot;Sarcandra&quot;       
+1722623 &quot;Lactobacillales&quot;   &quot;Lactobacillaceae&quot;   &quot;Lactobacillus&quot;   
+        Species      
+4431803 &quot;&quot;           
+4420570 &quot;&quot;           
+2806353 &quot;&quot;           
+4419276 &quot;&quot;           
+4449851 &quot;&quot;           
+4360511 &quot;&quot;           
+4450795 &quot;&quot;           
+806487  &quot;&quot;           
+3746876 &quot;palmata&quot;    
+4453316 &quot;grandifolia&quot;
+1722623 &quot;&quot;           </code></pre>
+<pre class="r"><code>#heat map of selected variables
+corrplot(cor(fecal_skin$X[,i_x],fecal_skin$Y[,i_y]),main=&#39;Correlation matrix of selected taxa&#39;)</code></pre>
+<p><img src="figure/realdata.Rmd/unnamed-chunk-1-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#oral and skin
+dim(oral_skin$X)</code></pre>
+<pre><code>[1] 426 100</code></pre>
+<pre class="r"><code>Sx=GenStrucMat(oral_skin$X,oral_skin$Tree_S1,wcorr=T,h=0.3)
+Sy=GenStrucMat(oral_skin$Y,oral_skin$Tree_S2,wcorr=T,h=0.3)
+dim(Sx)</code></pre>
+<pre><code>[1]  60 100</code></pre>
+<pre class="r"><code>dim(Sy)</code></pre>
+<pre><code>[1]  50 100</code></pre>
+<pre class="r"><code>#2.0, 1.8
+mod_oral_skin=gscca.bic(oral_skin$X,oral_skin$Y,gamma.u=c(1.7,1.8,1.9,2,2.5),gamma.v=c(1,1.6,1.8,2,2.5),Sx=Sx,Sy=Sy)</code></pre>
+<pre><code>Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero
+
+Warning in cor(x %*% beta.ui[, k], y %*% beta.vi[, l]): the standard
+deviation is zero</code></pre>
+<pre class="r"><code>#plot the three, label the correlated ones
+i_x=which(mod_oral_skin$u!=0)
+i_y=which(mod_oral_skin$v!=0)
+plot(oral_skin$Tree_S1,show.tip.label = F,use.edge.length = F,edge.color = 4,main=&#39;Oral&#39;)
+tiplabels(tip=i_x,pch=21,bg=&#39;red&#39;)</code></pre>
+<p><img src="figure/realdata.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot(oral_skin$Tree_S2,show.tip.label = F,use.edge.length = F,edge.color = 4,direction = &#39;leftwards&#39;,main=&#39;Skin&#39;)
+tiplabels(tip=i_y,pch=21,bg=&#39;red&#39;)</code></pre>
+<p><img src="figure/realdata.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#find the name
+TaxaRank = c(&quot;Kingdom&quot;, &quot;Phylum&quot;, &quot;Class&quot;, &quot;Order&quot;, &quot;Family&quot;, &quot;Genus&quot;, &quot;Species&quot;)
+colnames(oral_skin$Taxa_S1)=TaxaRank
+colnames(oral_skin$Taxa_S2)=TaxaRank
+name_oral=oral_skin$Taxa_S1[match(colnames(oral_skin$X)[i_x],rownames(oral_skin$Taxa_S1)),]
+name_skin=oral_skin$Taxa_S2[match(colnames(oral_skin$Y)[i_y],rownames(oral_skin$Taxa_S2)),]
+#write.table(name_oral,file=&#39;oral_skin_oral.csv&#39;)
+#write.table(name_skin,file=&#39;oral_skin_skin.csv&#39;)
+name_oral</code></pre>
+<pre><code>        Kingdom    Phylum           Class               
+4431355 &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Betaproteobacteria&quot;
+4350466 &quot;Bacteria&quot; &quot;Bacteroidetes&quot;  &quot;Flavobacteriia&quot;    
+932077  &quot;Bacteria&quot; &quot;Actinobacteria&quot; &quot;Actinobacteria&quot;    
+4405869 &quot;Bacteria&quot; &quot;Fusobacteria&quot;   &quot;Fusobacteriia&quot;     
+621651  &quot;Bacteria&quot; &quot;Firmicutes&quot;     &quot;Clostridia&quot;        
+        Order              Family               Genus          
+4431355 &quot;Neisseriales&quot;     &quot;Neisseriaceae&quot;      &quot;&quot;             
+4350466 &quot;Flavobacteriales&quot; &quot;[Weeksellaceae]&quot;    &quot;&quot;             
+932077  &quot;Actinomycetales&quot;  &quot;Micrococcaceae&quot;     &quot;Rothia&quot;       
+4405869 &quot;Fusobacteriales&quot;  &quot;Fusobacteriaceae&quot;   &quot;Fusobacterium&quot;
+621651  &quot;Clostridiales&quot;    &quot;[Mogibacteriaceae]&quot; &quot;&quot;             
+        Species       
+4431355 &quot;&quot;            
+4350466 &quot;&quot;            
+932077  &quot;mucilaginosa&quot;
+4405869 &quot;&quot;            
+621651  &quot;&quot;            </code></pre>
+<pre class="r"><code>name_skin</code></pre>
+<pre><code>        Kingdom    Phylum           Class                
+4431803 &quot;Bacteria&quot; &quot;Cyanobacteria&quot;  &quot;Chloroplast&quot;        
+4420570 &quot;Bacteria&quot; &quot;Cyanobacteria&quot;  &quot;Chloroplast&quot;        
+2806353 &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Gammaproteobacteria&quot;
+4389705 &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Betaproteobacteria&quot; 
+4419276 &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Gammaproteobacteria&quot;
+4449851 &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Gammaproteobacteria&quot;
+4360511 &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Gammaproteobacteria&quot;
+706432  &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Gammaproteobacteria&quot;
+4450795 &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Gammaproteobacteria&quot;
+806487  &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Gammaproteobacteria&quot;
+4313823 &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Gammaproteobacteria&quot;
+3746876 &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Alphaproteobacteria&quot;
+4453316 &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Alphaproteobacteria&quot;
+4482944 &quot;Bacteria&quot; &quot;Firmicutes&quot;     &quot;Bacilli&quot;            
+1722623 &quot;Bacteria&quot; &quot;Firmicutes&quot;     &quot;Bacilli&quot;            
+1096610 &quot;Bacteria&quot; &quot;Firmicutes&quot;     &quot;Clostridia&quot;         
+4475758 &quot;Bacteria&quot; &quot;Firmicutes&quot;     &quot;Clostridia&quot;         
+        Order               Family               Genus             
+4431803 &quot;Streptophyta&quot;      &quot;&quot;                   &quot;&quot;                
+4420570 &quot;Streptophyta&quot;      &quot;&quot;                   &quot;&quot;                
+2806353 &quot;Xanthomonadales&quot;   &quot;Xanthomonadaceae&quot;   &quot;Stenotrophomonas&quot;
+4389705 &quot;Burkholderiales&quot;   &quot;Comamonadaceae&quot;     &quot;Alicycliphilus&quot;  
+4419276 &quot;Pseudomonadales&quot;   &quot;Pseudomonadaceae&quot;   &quot;Pseudomonas&quot;     
+4449851 &quot;Enterobacteriales&quot; &quot;Enterobacteriaceae&quot; &quot;&quot;                
+4360511 &quot;Enterobacteriales&quot; &quot;Enterobacteriaceae&quot; &quot;Serratia&quot;        
+706432  &quot;Pseudomonadales&quot;   &quot;Moraxellaceae&quot;      &quot;Acinetobacter&quot;   
+4450795 &quot;Pseudomonadales&quot;   &quot;Moraxellaceae&quot;      &quot;Acinetobacter&quot;   
+806487  &quot;Pseudomonadales&quot;   &quot;Moraxellaceae&quot;      &quot;Acinetobacter&quot;   
+4313823 &quot;Pseudomonadales&quot;   &quot;Moraxellaceae&quot;      &quot;Psychrobacter&quot;   
+3746876 &quot;Rickettsiales&quot;     &quot;mitochondria&quot;       &quot;Carludovica&quot;     
+4453316 &quot;Rickettsiales&quot;     &quot;mitochondria&quot;       &quot;Sarcandra&quot;       
+4482944 &quot;Lactobacillales&quot;   &quot;Leuconostocaceae&quot;   &quot;Leuconostoc&quot;     
+1722623 &quot;Lactobacillales&quot;   &quot;Lactobacillaceae&quot;   &quot;Lactobacillus&quot;   
+1096610 &quot;Clostridiales&quot;     &quot;[Tissierellaceae]&quot;  &quot;Finegoldia&quot;      
+4475758 &quot;Clostridiales&quot;     &quot;Veillonellaceae&quot;    &quot;Veillonella&quot;     
+        Species      
+4431803 &quot;&quot;           
+4420570 &quot;&quot;           
+2806353 &quot;&quot;           
+4389705 &quot;&quot;           
+4419276 &quot;&quot;           
+4449851 &quot;&quot;           
+4360511 &quot;&quot;           
+706432  &quot;&quot;           
+4450795 &quot;&quot;           
+806487  &quot;&quot;           
+4313823 &quot;&quot;           
+3746876 &quot;palmata&quot;    
+4453316 &quot;grandifolia&quot;
+4482944 &quot;&quot;           
+1722623 &quot;&quot;           
+1096610 &quot;&quot;           
+4475758 &quot;dispar&quot;     </code></pre>
+<pre class="r"><code>corrplot(cor(oral_skin$X[,i_x],oral_skin$Y[,i_y]),main=&#39;Correlation matrix of selected taxa&#39;)</code></pre>
+<p><img src="figure/realdata.Rmd/unnamed-chunk-2-3.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="session-information" class="section level2">
+<h2>Session information</h2>
+<!-- Insert the session information into the document -->
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.4.0 (2017-04-21)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 16299)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] corrplot_0.84   ape_5.0         scca_0.1.0      dirmult_0.1.3-4
+ [5] glmnet_2.0-13   foreach_1.4.3   genlasso_1.3    igraph_1.1.2   
+ [9] Matrix_1.2-9    MASS_7.3-47     PMA_1.0.9       impute_1.50.1  
+[13] plyr_1.8.4     
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_0.12.14     knitr_1.15.1     magrittr_1.5     lattice_0.20-35 
+ [5] stringr_1.2.0    tools_3.4.0      parallel_3.4.0   grid_3.4.0      
+ [9] nlme_3.1-131     git2r_0.20.0     htmltools_0.3.5  iterators_1.0.8 
+[13] yaml_2.1.16      rprojroot_1.3-1  digest_0.6.13    codetools_0.2-15
+[17] evaluate_0.10    rmarkdown_1.8    stringi_1.1.6    compiler_3.4.0  
+[21] backports_1.0.5  pkgconfig_2.0.1 </code></pre>
+</div>
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+<hr>
+<p>
+    This <a href="http://rmarkdown.rstudio.com">R Markdown</a> site was created with <a href="https://github.com/jdblischak/workflowr">workflowr</a>
+</p>
+<hr>
+
+<!-- To enable disqus, uncomment the section below and provide your disqus_shortname -->
+
+<!-- disqus
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rmarkdown'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+-->
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
