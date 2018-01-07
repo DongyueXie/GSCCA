@@ -40,10 +40,10 @@ model3gscca=c()
 for(rho in 1:length(rholist)){
   sigma_x=arcov(rholist[rho],100)
   sigma_y=sigma_x
-  model3S0=rbind(model3S0,finals(s0cca_simu(10,u,v,50,'normal',1,sigma_x,sigma_y)))
-  model3S1=rbind(model3S1,finals(s1cca_simu(10,u,v,50,'normal',1,sigma_x,sigma_y)))
-  model3elnet=rbind(model3elnet,finals(elnet.cca.simu(10,u,v,50,'normal',1,sigma_x,sigma_y)))
-  model3gscca=rbind(model3gscca,finals(gscca.simu.normal(10,edges,u,v,50,'normal',1,sigma_x,sigma_y,
+  model3S0=rbind(model3S0,finals(s0cca_simu(100,u,v,50,'normal',1,sigma_x,sigma_y)))
+  model3S1=rbind(model3S1,finals(s1cca_simu(100,u,v,50,'normal',1,sigma_x,sigma_y)))
+  model3elnet=rbind(model3elnet,finals(elnet.cca.simu(100,u,v,50,'normal',1,sigma_x,sigma_y)))
+  model3gscca=rbind(model3gscca,finals(gscca.simu.normal(100,edges,edges,u,v,50,'normal',1,sigma_x,sigma_y,
                                                          gamma.u = c(0.1),gamma.v = c(0.1),maxsteps=20)))
 }
 
